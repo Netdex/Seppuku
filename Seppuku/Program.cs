@@ -7,6 +7,7 @@ using Nancy;
 using Nancy.Hosting.Self;
 using Quartz;
 using Quartz.Impl;
+using Seppuku.Config;
 using Seppuku.Module;
 using Seppuku.Switch;
 using Seppuku.Utility;
@@ -68,6 +69,7 @@ namespace Seppuku
                 C.WriteLine($"`i Running on http://localhost:{Conf.Configuration.Port}/");
                 Console.ReadLine();
             }
+            Console.WriteLine();
 
             C.WriteLine("`w Local server terminated! No commands will work!");
 

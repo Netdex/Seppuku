@@ -4,32 +4,72 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging.Configuration;
 using Nancy;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Seppuku.Switch;
 
 namespace Seppuku.Endpoint
 {
     public class IndexEndpoint : NancyModule
     {
+        private readonly Dictionary<string, Func<dynamic, JObject>> JSONGet = new Dictionary<string, Func<dynamic, JObject>>();
+
         public IndexEndpoint()
         {
-            Get["/"] = _ => $"{Assembly.GetExecutingAssembly().GetName()}";
-            Get["/remain"] = _ =>
+            JSONGet["/"] = _ =>
+            {
+                JObject jo = new JObject
+                {
+                    ["application"] = Assembly.GetExecutingAssembly().GetName().Name,
+                    ["version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString()
+                };
+                return jo;
+            };
+
+            JSONGet["/remain"] = _ =>
             {
                 var timeleft = SwitchControl.TimeLeft();
+                JObject jo = new JObject();
                 if (SwitchControl.Expired())
-                    return "Expired";
-
-                return $"Remaining time until expiry: {timeleft}";
+                {
+                    jo["verbose"] = "expired";
+                    jo["remaining"] = 0;
+                }
+                else
+                {
+                    jo["verbose"] = timeleft.ToString() + " remaining";
+                    jo["remaining"] = timeleft.TotalSeconds;
+                }
+                return jo;
             };
-            Get["/reset"] = _ =>
+
+            JSONGet["/reset"] = _ =>
             {
+                JObject jo = new JObject();
                 if (SwitchControl.Expired())
-                    return "Cannot reset expired timer";
-
-                SwitchControl.Reset();
-                return "Reset successful";
+                {
+                    jo["verbose"] = "cannot reset expired timer";
+                    jo["status"] = -1;
+                }
+                else
+                {
+                    SwitchControl.Reset();
+                    jo["verbose"] = "reset successful";
+                    jo["status"] = 0;
+                }
+                return jo;
             };
+
+            foreach (var k in JSONGet)
+            {
+                Get[k.Key] = param =>
+                {
+                    var jo = (JObject) k.Value(param);
+                    return Response.AsText(jo.ToString(Formatting.None));
+                };
+            }
         }
     }
 }
