@@ -26,5 +26,10 @@ namespace Seppuku.Switch
         {
             return TimeLeft() < TimeSpan.Zero;
         }
+
+        public static bool Authorized(string passphrase)
+        {
+            return passphrase == Conf.Configuration.Secret;
+        }
     }
 }

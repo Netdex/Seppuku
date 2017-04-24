@@ -23,8 +23,8 @@ namespace Seppuku
             if (Conf.Initialize())
                 C.WriteLine($"`i Configuration file did not exist or was corrupted, created {Conf.ConfigurationFileName}");
 
+            C.WriteLine($"`i Secret key is {Conf.Configuration.Secret}");
             Sched.Initialize();
-            
             C.WriteLine($"`i Scheduled failsafe activation date at {Conf.Configuration.FailureDate}");
             C.WriteLine($"`i Current failsafe grace delay is {Conf.Configuration.GraceTime}");
             if (SwitchControl.Expired())

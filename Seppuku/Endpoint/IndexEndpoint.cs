@@ -45,19 +45,27 @@ namespace Seppuku.Endpoint
                 return jo;
             };
 
-            JSONGet["/reset"] = _ =>
+            JSONGet["/reset/{secret}"] = param =>
             {
                 JObject jo = new JObject();
-                if (SwitchControl.Expired())
+                if (SwitchControl.Authorized(param.secret))
                 {
-                    jo["verbose"] = "cannot reset expired timer";
-                    jo["status"] = -1;
+                    if (SwitchControl.Expired())
+                    {
+                        jo["verbose"] = "cannot reset expired timer";
+                        jo["status"] = -1;
+                    }
+                    else
+                    {
+                        SwitchControl.Reset();
+                        jo["verbose"] = "reset successful";
+                        jo["status"] = 0;
+                    }
                 }
                 else
                 {
-                    SwitchControl.Reset();
-                    jo["verbose"] = "reset successful";
-                    jo["status"] = 0;
+                    jo["verbose"] = "unauthorized";
+                    jo["status"] = -999;
                 }
                 return jo;
             };
