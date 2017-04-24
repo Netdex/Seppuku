@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ConfigBase.cs" />
+    <Compile Include="Endpoint\ErrorEndpoint.cs" />
+    <Compile Include="Endpoint\IndexEndpoint.cs" />
     <Compile Include="Module\Internal\ModuleAlert.cs" />
     <Compile Include="Module\ModuleManager.cs" />
     <Compile Include="Program.cs" />
@@ -69,6 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Switch\SwitchControl.cs" />
     <Compile Include="Switch\DeadmanJob.cs" />
     <Compile Include="Switch\Sched.cs" />
     <Compile Include="Utility\C.cs" />

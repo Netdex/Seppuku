@@ -38,13 +38,16 @@ namespace Seppuku.Switch
                 .StartAt(date)
                 .ForJob(JobKey, GroupKey)
                 .Build();
-
+            
             Scheduler.ScheduleJob(TriggerJob, trigger);
         }
 
         public static void UnscheduleTrigger()
         {
             Scheduler.UnscheduleJob(new TriggerKey(TriggerKey, GroupKey));
+            
         }
+
+        
     }
 }

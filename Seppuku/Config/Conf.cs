@@ -17,13 +17,6 @@ namespace Seppuku.Switch
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(ConfigBase));
         public static ConfigBase Configuration;
 
-        public static void Reset()
-        {
-            Configuration.FailureDate = DateTime.Now + Configuration.GraceTime;
-            Sched.UnscheduleTrigger();
-            Sched.ScheduleTrigger(Configuration.FailureDate);
-        }
-
         public static bool Initialize()
         {
             bool stat = Load();

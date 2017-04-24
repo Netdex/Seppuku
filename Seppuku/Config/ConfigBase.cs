@@ -20,9 +20,11 @@ namespace Seppuku.Config
         }
         [Browsable(false)]
         [XmlElement("GraceTime")] 
-        public string _graceTimeString { get; set; } = XmlConvert.ToString(TimeSpan.FromDays(30));
+        public string _graceTimeString { get; set; } = XmlConvert.ToString(TimeSpan.FromSeconds(10));
 
         public DateTime FailureDate { get; set; }
+
+        public int Port { get; set; } = 19007;
 
         public ConfigBase()
         {
