@@ -10,8 +10,8 @@ namespace Seppuku.Module.Internal
     /// <summary>
     /// Simple demonstration module which prints a message on every event
     /// </summary>
-    [Export(typeof(TriggerModule))]
-    public class ModuleAlert : TriggerModule
+    [Export(typeof(SeppukuModule))]
+    public class ModuleAlert : SeppukuModule
     {
         private static Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
 

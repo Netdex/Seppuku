@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -37,12 +38,12 @@ namespace Seppuku
             // load global configuration
             if (Conf.I.Initialize(defaultConf))
                 C.WriteLine($"`w Configuration file did not exist or was corrupted, created {Conf.ConfigurationFileName}");
-            C.WriteLine($"`i Secret key is {Conf.I.Conf["Secret"] as string}");
+            C.WriteLine($"`i Secret key is &f{Conf.I.Conf["Secret"] as string}&r");
 
             // load scheduling information from global configuration
             Sched.Initialize();
-            C.WriteLine($"`i Scheduled failsafe activation date at {(DateTime)Conf.I.Conf["FailureDate"]}");
-            C.WriteLine($"`i Current failsafe grace delay is {XmlConvert.ToTimeSpan((string)Conf.I.Conf["GraceTime"])}");
+            C.WriteLine($"`i Scheduled failsafe activation date at &f{(DateTime)Conf.I.Conf["FailureDate"]}&r");
+            C.WriteLine($"`i Current failsafe grace delay is &f{XmlConvert.ToTimeSpan((string)Conf.I.Conf["GraceTime"])}&r");
             if (SwitchControl.Expired())
             {
                 C.WriteLine($"`e Switch is already expired! No scheduling will occur.");

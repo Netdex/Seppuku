@@ -11,8 +11,8 @@ using Seppuku.Module.Utility;
 
 namespace Seppuku.Module.Internal
 {
-    [Export(typeof(TriggerModule))]
-    class ModuleWebAPI : TriggerModule
+    [Export(typeof(SeppukuModule))]
+    class ModuleWebAPI : SeppukuModule
     {
         private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
 

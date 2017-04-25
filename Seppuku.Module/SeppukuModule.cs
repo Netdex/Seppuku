@@ -10,7 +10,7 @@ using Seppuku.Module.Utility;
 
 namespace Seppuku.Module
 {
-    public abstract class TriggerModule
+    public abstract class SeppukuModule
     {
         public const string ModuleConfigDirectory = "Configuration";
 
@@ -21,7 +21,7 @@ namespace Seppuku.Module
         public TypeConf Configuration;
 
 
-        protected TriggerModule(string name, string description, Dictionary<string, object> defaultConf) 
+        protected SeppukuModule(string name, string description, Dictionary<string, object> defaultConf) 
         {
             Name = name;
             Description = description;

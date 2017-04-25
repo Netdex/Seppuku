@@ -20,7 +20,7 @@ namespace Seppuku.Module
         private static ModuleManager _instance;
 
         private CompositionContainer _container;
-        [ImportMany] public Lazy<TriggerModule>[] TriggerModules { get; set; }
+        [ImportMany] public Lazy<SeppukuModule>[] TriggerModules { get; set; }
 
         public bool Initialize()
         {

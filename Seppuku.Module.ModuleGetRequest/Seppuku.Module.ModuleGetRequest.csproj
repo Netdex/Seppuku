@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D5646E0-0936-4DF6-9006-C8B024C75940}</ProjectGuid>
+    <ProjectGuid>{6BC36678-671D-4629-AD8F-A70B556B2CC1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Seppuku.Module</RootNamespace>
-    <AssemblyName>Seppuku.Module</AssemblyName>
+    <RootNamespace>Seppuku.Module.ModuleGetRequest</RootNamespace>
+    <AssemblyName>Seppuku.Module.ModuleGetRequest</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,10 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SeppukuModule.cs" />
+    <Compile Include="ModuleGetRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Config\TypeConf.cs" />
-    <Compile Include="Utility\C.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Seppuku.Module\Seppuku.Module.csproj">
+      <Project>{7d5646e0-0936-4df6-9006-c8b024c75940}</Project>
+      <Name>Seppuku.Module</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
