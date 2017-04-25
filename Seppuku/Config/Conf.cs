@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
+using Seppuku.Module;
+using Seppuku.Module.Config;
 
 namespace Seppuku.Config
 {
@@ -7,44 +11,18 @@ namespace Seppuku.Config
     {
         public const string ConfigurationFileName = "seppuku.xml";
 
-        private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(ConfigBase));
-        public static ConfigBase Configuration;
+        public static TypeConf Instance => _instance ??
+                                                       (_instance = new TypeConf(ConfigurationFileName));
+        private static TypeConf _instance;
 
-        public static bool Initialize()
+
+        private static readonly Random random = new Random();
+        public static string RandomString(int length)
         {
-            bool stat = Load();
-            if (!stat)
-            {
-                Configuration = new ConfigBase();
-                Save();
-            }
-            return !stat;
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static bool Load()
-        {
-            try
-            {
-                Configuration = (ConfigBase)Serializer.Deserialize(File.OpenRead(ConfigurationFileName));
-                return Configuration != null;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public static bool Save()
-        {
-            try
-            {
-                Serializer.Serialize(File.OpenWrite(ConfigurationFileName), Configuration);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }

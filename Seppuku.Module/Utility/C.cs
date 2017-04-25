@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seppuku.Utility
+namespace Seppuku.Module.Utility
 {
     public static class C
     {

@@ -4,14 +4,15 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Seppuku.Utility;
 
 namespace Seppuku.Module.Internal
 {
     [Export(typeof(TriggerModule))]
     public class ModuleAlert : TriggerModule
     {
-        public ModuleAlert(): base("ModuleAlert", "Default test module")
+        private static Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
+
+        public ModuleAlert(): base("ModuleAlert", "Default test module", DefaultConf)
         {
 
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Seppuku.Config;
 
 namespace Seppuku.Switch
@@ -11,15 +12,15 @@ namespace Seppuku.Switch
     {
         public static void Reset()
         {
-            Conf.Configuration.FailureDate = DateTime.Now + Conf.Configuration.GraceTime;
-            Conf.Save();
+            Conf.Instance.Configuration["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string)Conf.Instance.Configuration["GraceTime"]);
+            Conf.Instance.Save();
             Sched.UnscheduleTrigger();
-            Sched.ScheduleTrigger(Conf.Configuration.FailureDate);
+            Sched.ScheduleTrigger((DateTime) Conf.Instance.Configuration["FailureDate"]);
         }
 
         public static TimeSpan TimeLeft()
         {
-            return Conf.Configuration.FailureDate - DateTime.Now;
+            return (DateTime)Conf.Instance.Configuration["FailureDate"] - DateTime.Now;
         }
 
         public static bool Expired()
@@ -29,7 +30,7 @@ namespace Seppuku.Switch
 
         public static bool Authorized(string passphrase)
         {
-            return passphrase == Conf.Configuration.Secret;
+            return passphrase == (string)Conf.Instance.Configuration["Secret"];
         }
     }
 }

@@ -61,7 +61,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ConfigBase.cs" />
     <Compile Include="Endpoint\ErrorEndpoint.cs" />
     <Compile Include="Endpoint\IndexEndpoint.cs" />
     <Compile Include="Module\Internal\ModuleAlert.cs" />
@@ -77,7 +76,6 @@
     <Compile Include="Switch\SwitchControl.cs" />
     <Compile Include="Switch\DeadmanJob.cs" />
     <Compile Include="Switch\Sched.cs" />
-    <Compile Include="Utility\C.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
