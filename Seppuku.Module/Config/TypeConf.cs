@@ -5,6 +5,9 @@ using System.Xml.Serialization;
 
 namespace Seppuku.Module.Config
 {
+    /// <summary>
+    /// A hack I copied verbatim from stackoverflow to make serializing Dictionaries possible
+    /// </summary>
     public class DictItem
     {
         [XmlAttribute]
@@ -13,13 +16,16 @@ namespace Seppuku.Module.Config
         public object Value;
     }
 
+    /// <summary>
+    /// A glorified Dictionary to file serialization for configuration
+    /// </summary>
     public class TypeConf
     {
         public string ConfigurationFileName { get; set; }
 
         private readonly XmlSerializer _serializer = new XmlSerializer(typeof(DictItem[]),
             new XmlRootAttribute() { ElementName = "items" });
-        public Dictionary<string, object> Configuration;
+        public Dictionary<string, object> Conf;
 
         public TypeConf(string file)
         {
@@ -31,7 +37,7 @@ namespace Seppuku.Module.Config
             bool stat = Load();
             if (!stat)
             {
-                Configuration = new Dictionary<string, object>(defaults);
+                Conf = new Dictionary<string, object>(defaults);
                 Save();
             }
             return !stat;
@@ -42,10 +48,10 @@ namespace Seppuku.Module.Config
             try
             {
                 var strm = File.OpenRead(ConfigurationFileName);
-                Configuration = ((DictItem[])_serializer.Deserialize(strm))
+                Conf = ((DictItem[])_serializer.Deserialize(strm))
                     .ToDictionary(i => i.ID, i => i.Value);
                 strm.Close();
-                return Configuration != null;
+                return Conf != null;
             }
             catch
             {
@@ -58,7 +64,7 @@ namespace Seppuku.Module.Config
             try
             {
                 var strm = File.OpenWrite(ConfigurationFileName);
-                _serializer.Serialize(strm, Configuration.Select(kv => new DictItem() { ID = kv.Key, Value = kv.Value }).ToArray());
+                _serializer.Serialize(strm, Conf.Select(kv => new DictItem() { ID = kv.Key, Value = kv.Value }).ToArray());
                 strm.Close();
                 return true;
             }

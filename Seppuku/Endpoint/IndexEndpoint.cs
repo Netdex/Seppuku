@@ -12,6 +12,9 @@ using Seppuku.Switch;
 
 namespace Seppuku.Endpoint
 {
+    /// <summary>
+    /// Defines all web api endpoints
+    /// </summary>
     public class IndexEndpoint : NancyModule
     {
         private readonly Dictionary<string, Func<dynamic, JObject>> JSONGet = new Dictionary<string, Func<dynamic, JObject>>();

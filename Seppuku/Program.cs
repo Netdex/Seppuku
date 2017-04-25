@@ -21,6 +21,7 @@ namespace Seppuku
     {
         static void Main(string[] args)
         {
+            // show the sick greeting
             C.WriteLine(Properties.Resources.Greeting);
 
             #region DefaultConfiguration
@@ -30,16 +31,18 @@ namespace Seppuku
                 ["Port"] = 19007,
                 ["Secret"] = Conf.RandomString(16)
             };
-            defaultConf["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string) defaultConf["GraceTime"]);
+            defaultConf["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string)defaultConf["GraceTime"]);
             #endregion
 
-            if (Conf.Instance.Initialize(defaultConf))
+            // load global configuration
+            if (Conf.I.Initialize(defaultConf))
                 C.WriteLine($"`w Configuration file did not exist or was corrupted, created {Conf.ConfigurationFileName}");
+            C.WriteLine($"`i Secret key is {Conf.I.Conf["Secret"] as string}");
 
-            C.WriteLine($"`i Secret key is {Conf.Instance.Configuration["Secret"] as string}");
+            // load scheduling information from global configuration
             Sched.Initialize();
-            C.WriteLine($"`i Scheduled failsafe activation date at {(DateTime)Conf.Instance.Configuration["FailureDate"]}");
-            C.WriteLine($"`i Current failsafe grace delay is {(string) Conf.Instance.Configuration["GraceTime"]}");
+            C.WriteLine($"`i Scheduled failsafe activation date at {(DateTime)Conf.I.Conf["FailureDate"]}");
+            C.WriteLine($"`i Current failsafe grace delay is {XmlConvert.ToTimeSpan((string)Conf.I.Conf["GraceTime"])}");
             if (SwitchControl.Expired())
             {
                 C.WriteLine($"`e Switch is already expired! No scheduling will occur.");
@@ -47,16 +50,17 @@ namespace Seppuku
             else
             {
                 // schedule existing trigger
-                Sched.ScheduleTrigger((DateTime) Conf.Instance.Configuration["FailureDate"] );
+                Sched.ScheduleTrigger((DateTime)Conf.I.Conf["FailureDate"]);
             }
             Console.WriteLine();
 
+            // load modules from internal and directory
             if (ModuleManager.Instance.Initialize())
             {
                 C.WriteLine("`i Loaded modules: ");
                 foreach (var mod in ModuleManager.Instance.TriggerModules)
                 {
-                    C.WriteLine($"\t&a{mod.Value.Name}&r - &f{mod.Value.Description}&r");
+                    C.WriteLine($"&a{$"[{mod.Value.Name}]",20}&r - &f{mod.Value.Description}&r");
                 }
             }
             else
@@ -66,28 +70,13 @@ namespace Seppuku
             }
             Console.WriteLine();
 
+            // run and bind all the handlers for the modules
             ModuleManager.Instance.EmitStart();
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
                 ModuleManager.Instance.EmitStop();
             };
             Console.WriteLine();
-
-            C.WriteLine("`i Running local server for command execution");
-            using (var host = new NancyHost(new DefaultNancyBootstrapper(), new HostConfiguration
-            {
-                RewriteLocalhost = false
-            }, new Uri($"http://localhost:{Conf.Instance.Configuration["Port"] as int?}")))
-            {
-                host.Start();
-                C.WriteLine($"`i Running on http://localhost:{Conf.Instance.Configuration["Port"] as int?}/");
-                Console.WriteLine();
-                Console.ReadLine();
-            }
-           
-
-            C.WriteLine("`w Local server terminated! No commands will work!");
-
         }
     }
 }

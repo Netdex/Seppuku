@@ -9,6 +9,9 @@ using Seppuku.Config;
 
 namespace Seppuku.Switch
 {
+    /// <summary>
+    /// Global scheduler for deadman's switch triggers
+    /// </summary>
     class Sched
     {
         private const string GroupKey = "seppuku";
@@ -45,9 +48,6 @@ namespace Seppuku.Switch
         public static void UnscheduleTrigger()
         {
             Scheduler.UnscheduleJob(new TriggerKey(TriggerKey, GroupKey));
-            
         }
-
-        
     }
 }

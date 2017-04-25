@@ -21,7 +21,7 @@ namespace Seppuku.Module
         public TypeConf Configuration;
 
 
-        public TriggerModule(string name, string description, Dictionary<string, object> defaultConf) 
+        protected TriggerModule(string name, string description, Dictionary<string, object> defaultConf) 
         {
             Name = name;
             Description = description;
@@ -35,13 +35,13 @@ namespace Seppuku.Module
         }
         
 
-        public abstract void Start();
-        public abstract void Trigger();
-        public abstract void Stop();
+        public abstract void OnStart();
+        public abstract void OnTrigger();
+        public abstract void OnStop();
 
         public void Log(string s)
         {
-            C.WriteLine($"&a[{Name}] &f{s}&r");
+            C.WriteLine($"&a{$"[{Name}]",20} &f{s}&r");
         }
     }
 }

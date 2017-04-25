@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Seppuku.Module.Internal
 {
+    /// <summary>
+    /// Simple demonstration module which prints a message on every event
+    /// </summary>
     [Export(typeof(TriggerModule))]
     public class ModuleAlert : TriggerModule
     {
@@ -17,17 +20,17 @@ namespace Seppuku.Module.Internal
 
         }
 
-        public override void Start()
+        public override void OnStart()
         {
             Log("Modules loaded");
         }
 
-        public override void Trigger()
+        public override void OnTrigger()
         {
             Log("Deadman switch triggered");
         }
 
-        public override void Stop()
+        public override void OnStop()
         {
             Log("Modules stopped");
         }

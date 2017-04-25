@@ -8,19 +8,22 @@ using Seppuku.Config;
 
 namespace Seppuku.Switch
 {
+    /// <summary>
+    /// Defines most helper methods to manage the deadman's switch
+    /// </summary>
     class SwitchControl
     {
         public static void Reset()
         {
-            Conf.Instance.Configuration["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string)Conf.Instance.Configuration["GraceTime"]);
-            Conf.Instance.Save();
+            Conf.I.Conf["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string)Conf.I.Conf["GraceTime"]);
+            Conf.I.Save();
             Sched.UnscheduleTrigger();
-            Sched.ScheduleTrigger((DateTime) Conf.Instance.Configuration["FailureDate"]);
+            Sched.ScheduleTrigger((DateTime) Conf.I.Conf["FailureDate"]);
         }
 
         public static TimeSpan TimeLeft()
         {
-            return (DateTime)Conf.Instance.Configuration["FailureDate"] - DateTime.Now;
+            return (DateTime)Conf.I.Conf["FailureDate"] - DateTime.Now;
         }
 
         public static bool Expired()
@@ -30,7 +33,7 @@ namespace Seppuku.Switch
 
         public static bool Authorized(string passphrase)
         {
-            return passphrase == (string)Conf.Instance.Configuration["Secret"];
+            return passphrase == (string)Conf.I.Conf["Secret"];
         }
     }
 }
