@@ -12,7 +12,7 @@ namespace Seppuku.Switch
     {
         public void Execute(IJobExecutionContext context)
         {
-            ModuleManager.Instance.EmitTrigger();
+            SwitchControl.Trigger();
         }
     }
 }

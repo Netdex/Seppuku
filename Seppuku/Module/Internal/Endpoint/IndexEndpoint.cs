@@ -1,37 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Logging.Configuration;
 using Nancy;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Seppuku.Switch;
 
-namespace Seppuku.Endpoint
+namespace Seppuku.Module.Internal.Endpoint
 {
     /// <summary>
     /// Defines all web api endpoints
     /// </summary>
     public class IndexEndpoint : NancyModule
     {
-        private readonly Dictionary<string, Func<dynamic, JObject>> JSONGet = new Dictionary<string, Func<dynamic, JObject>>();
 
         public IndexEndpoint()
         {
-            JSONGet["/"] = _ =>
+            Get["/"] = _ =>
             {
                 JObject jo = new JObject
                 {
                     ["application"] = Assembly.GetExecutingAssembly().GetName().Name,
                     ["version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString()
                 };
-                return jo;
+                return Response.AsText(jo.ToString(Formatting.None));
             };
 
-            JSONGet["/remain"] = _ =>
+            Get["/remain"] = _ =>
             {
                 var timeleft = SwitchControl.TimeLeft();
                 JObject jo = new JObject();
@@ -45,10 +40,10 @@ namespace Seppuku.Endpoint
                     jo["verbose"] = timeleft.ToString() + " remaining";
                     jo["remaining"] = timeleft.TotalSeconds;
                 }
-                return jo;
+                return Response.AsText(jo.ToString(Formatting.None));
             };
 
-            JSONGet["/reset/{secret}"] = param =>
+            Get["/reset/{secret}"] = param =>
             {
                 JObject jo = new JObject();
                 if (SwitchControl.Authorized(param.secret))
@@ -70,17 +65,54 @@ namespace Seppuku.Endpoint
                     jo["verbose"] = "unauthorized";
                     jo["status"] = -999;
                 }
-                return jo;
+                return Response.AsText(jo.ToString(Formatting.None));
             };
 
-            foreach (var k in JSONGet)
+            Get["/trigger/{secret}"] = param =>
             {
-                Get[k.Key] = param =>
+                JObject jo = new JObject();
+                if (SwitchControl.Authorized(param.secret))
                 {
-                    var jo = (JObject) k.Value(param);
-                    return Response.AsText(jo.ToString(Formatting.None));
-                };
-            }
+                    if (SwitchControl.Expired())
+                    {
+                        jo["verbose"] = "cannot trigger expired timer";
+                        jo["status"] = -1;
+                    }
+                    else
+                    {
+                        SwitchControl.Trigger();
+                        jo["verbose"] = "trigger successful";
+                        jo["status"] = 0;
+                    }
+                }
+                else
+                {
+                    jo["verbose"] = "unauthorized";
+                    jo["status"] = -999;
+                }
+                return Response.AsText(jo.ToString(Formatting.None));
+            };
+
+#if DEBUG
+            Get["/debug/reset"] = _ =>
+            {
+                JObject jo = new JObject();
+                SwitchControl.Reset();
+                jo["debug"] = 1;
+                jo["verbose"] = "reset successful";
+                jo["status"] = 0;
+                return Response.AsText(jo.ToString(Formatting.None));
+            };
+            Get["/debug/trigger"] = _ =>
+            {
+                JObject jo = new JObject();
+                SwitchControl.Trigger();
+                jo["debug"] = 1;
+                jo["verbose"] = "trigger successful";
+                jo["status"] = 0;
+                return Response.AsText(jo.ToString(Formatting.None));
+            };
+#endif
         }
     }
 }

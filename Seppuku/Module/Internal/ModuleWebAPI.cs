@@ -24,13 +24,14 @@ namespace Seppuku.Module.Internal
 
         public override void OnStart()
         {
+            int port = Conf.Get("Port", 19007);
             // run the web api
             _host = new NancyHost(new DefaultNancyBootstrapper(), new HostConfiguration
             {
                 RewriteLocalhost = false
-            }, new Uri($"http://localhost:{(int)Conf.I.Conf["Port"]}"));
+            }, new Uri($"http://localhost:{port}"));
             _host.Start();
-            Log($"Running on http://localhost:{(int)Conf.I.Conf["Port"]}/");
+            Log($"Running on http://localhost:{port}/");
         }
 
         public override void OnTrigger()

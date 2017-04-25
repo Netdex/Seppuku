@@ -61,8 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Endpoint\ErrorEndpoint.cs" />
-    <Compile Include="Endpoint\IndexEndpoint.cs" />
+    <Compile Include="Module\Internal\Endpoint\ErrorEndpoint.cs" />
+    <Compile Include="Module\Internal\Endpoint\IndexEndpoint.cs" />
     <Compile Include="Module\Internal\ModuleAlert.cs" />
     <Compile Include="Module\Internal\ModuleWebAPI.cs" />
     <Compile Include="Module\ModuleManager.cs" />

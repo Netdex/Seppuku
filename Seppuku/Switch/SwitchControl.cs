@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Seppuku.Config;
+using Seppuku.Module;
+using Seppuku.Module.Utility;
 
 namespace Seppuku.Switch
 {
@@ -15,15 +18,26 @@ namespace Seppuku.Switch
     {
         public static void Reset()
         {
-            Conf.I.Conf["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string)Conf.I.Conf["GraceTime"]);
-            Conf.I.Save();
+            Conf.Set("FailureDate", DateTime.Now.AddSeconds(Conf.Get("GraceTime", double.MaxValue)));
+            Conf.Set("Triggered", false);
             Sched.UnscheduleTrigger();
-            Sched.ScheduleTrigger((DateTime) Conf.I.Conf["FailureDate"]);
+            Sched.ScheduleTrigger(Conf.Get("FailureDate", DateTime.MaxValue));
+        }
+
+        public static void Trigger()
+        {
+            if (!Expired())
+            {
+                Conf.Set("FailureDate", DateTime.Now.AddMilliseconds(-1));
+            }
+            Conf.Set("Triggered", true);
+            Sched.UnscheduleTrigger();
+            ModuleManager.Instance.EmitTrigger();
         }
 
         public static TimeSpan TimeLeft()
         {
-            return (DateTime)Conf.I.Conf["FailureDate"] - DateTime.Now;
+            return Conf.Get("FailureDate", DateTime.Now) - DateTime.Now;
         }
 
         public static bool Expired()
@@ -31,9 +45,14 @@ namespace Seppuku.Switch
             return TimeLeft() < TimeSpan.Zero;
         }
 
-        public static bool Authorized(string passphrase)
+        public static bool Triggered()
         {
-            return passphrase == (string)Conf.I.Conf["Secret"];
+            return Conf.Get("Triggered", false);
+        }
+
+        public static bool Authorized(string secret)
+        {
+            return secret == SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", null));
         }
     }
 }

@@ -25,33 +25,23 @@ namespace Seppuku
             // show the sick greeting
             C.WriteLine(Properties.Resources.Greeting);
 
-            #region DefaultConfiguration
-            Dictionary<string, object> defaultConf = new Dictionary<string, object>()
-            {
-                ["GraceTime"] = XmlConvert.ToString(TimeSpan.FromDays(30)),
-                ["Port"] = 19007,
-                ["Secret"] = Conf.RandomString(16)
-            };
-            defaultConf["FailureDate"] = DateTime.Now + XmlConvert.ToTimeSpan((string)defaultConf["GraceTime"]);
-            #endregion
-
             // load global configuration
-            if (Conf.I.Initialize(defaultConf))
+            if (Conf.Init())
                 C.WriteLine($"`w Configuration file did not exist or was corrupted, created {Conf.ConfigurationFileName}");
-            C.WriteLine($"`i Secret key is &f{Conf.I.Conf["Secret"] as string}&r");
+            C.WriteLine($"`i Secret key is &f{Conf.Get<string>("Secret", null)}&r, today's auth token is &f{SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", null))}&r");
 
             // load scheduling information from global configuration
             Sched.Initialize();
-            C.WriteLine($"`i Scheduled failsafe activation date at &f{(DateTime)Conf.I.Conf["FailureDate"]}&r");
-            C.WriteLine($"`i Current failsafe grace delay is &f{XmlConvert.ToTimeSpan((string)Conf.I.Conf["GraceTime"])}&r");
-            if (SwitchControl.Expired())
+            C.WriteLine($"`i Scheduled failsafe activation date at &f{Conf.Get<DateTime?>("FailureDate", null)}&r");
+            C.WriteLine($"`i Current failsafe grace delay is &f{TimeSpan.FromSeconds(Conf.Get("GraceTime", Double.MinValue))}&r");
+            if (SwitchControl.Triggered())
             {
                 C.WriteLine($"`e Switch is already expired! No scheduling will occur.");
             }
             else
             {
                 // schedule existing trigger
-                Sched.ScheduleTrigger((DateTime)Conf.I.Conf["FailureDate"]);
+                Sched.ScheduleTrigger(Conf.Get("FailureDate", DateTime.MaxValue));
             }
             Console.WriteLine();
 

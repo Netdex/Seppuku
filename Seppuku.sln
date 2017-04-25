@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku", "Seppuku\Seppuku.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Module", "Seppuku.Module\Seppuku.Module.csproj", "{7D5646E0-0936-4DF6-9006-C8B024C75940}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Tests", "Seppuku.Tests\Seppuku.Tests.csproj", "{3CD4E375-312E-45C9-9230-260B72B7A955}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Module.ModuleGetRequest", "Seppuku.Module.ModuleGetRequest\Seppuku.Module.ModuleGetRequest.csproj", "{6BC36678-671D-4629-AD8F-A70B556B2CC1}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{7D5646E0-0936-4DF6-9006-C8B024C75940}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D5646E0-0936-4DF6-9006-C8B024C75940}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D5646E0-0936-4DF6-9006-C8B024C75940}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CD4E375-312E-45C9-9230-260B72B7A955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CD4E375-312E-45C9-9230-260B72B7A955}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CD4E375-312E-45C9-9230-260B72B7A955}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CD4E375-312E-45C9-9230-260B72B7A955}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6BC36678-671D-4629-AD8F-A70B556B2CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BC36678-671D-4629-AD8F-A70B556B2CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BC36678-671D-4629-AD8F-A70B556B2CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
