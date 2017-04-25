@@ -26,7 +26,7 @@ in your contacts.
 3. Restart seppuku.exe and leave it running.
 
 ### Web API
-Seppuku also exposes a web api to query information about the deadman's switch, available at localhost:19007 by default (can be configured). All responses are returned in JSON. Look (here)[https://github.com/Netdex/Seppuku/blob/master/Seppuku/Endpoint/IndexEndpoint.cs] if you're curious about what data is returned. The following commands are available:
+Seppuku also exposes a web api to query information about the deadman's switch, available at localhost:19007 by default (can be configured). All responses are returned in JSON. Look [here](https://github.com/Netdex/Seppuku/blob/master/Seppuku/Endpoint/IndexEndpoint.cs) if you're curious about what data is returned. The following commands are available:
 
 #### Reset
 ```
@@ -48,8 +48,11 @@ Some general information about the running Seppuku instance.
 
 
 ### Configuration
-The template used for configuration is at https://github.com/Netdex/Seppuku/blob/master/Seppuku/Config/ConfigBase.cs, 
+The template used for configuration is at https://github.com/Netdex/Seppuku/blob/master/Seppuku/Program.cs#L26, 
 and is stored in seppuku.xml in the assembly directory. Modify the public properties to your heart's content.
+
+Each individual module also has it's own configuration, stored at `/Configuration`. Each module specifies its default 
+configuration through the constructor.
 
 ### Module Development
 Modules are MEF contract based. See `Seppuku/Module/Internal/ModuleAlert.cs` for an example. 
