@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Seppuku.Module.Internal
 {
     /// <summary>
-    /// Simple demonstration module which prints a message on every event
+    ///     Simple demonstration module which prints a message on every event
     /// </summary>
     [Export(typeof(SeppukuModule))]
     public class ModuleAlert : SeppukuModule
     {
-        private static Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
 
-        public ModuleAlert(): base("ModuleAlert", "Default test module", DefaultConf)
+        public ModuleAlert() : base("ModuleAlert", "Default test module", DefaultConf)
         {
-
         }
 
         public override void OnStart()
@@ -34,6 +29,7 @@ namespace Seppuku.Module.Internal
         {
             Log("Deadman's switch reset");
         }
+
         public override void OnStop()
         {
             Log("Modules stopped");

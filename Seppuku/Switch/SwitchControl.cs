@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using Seppuku.Config;
 using Seppuku.Module;
 using Seppuku.Module.Utility;
@@ -12,9 +6,9 @@ using Seppuku.Module.Utility;
 namespace Seppuku.Switch
 {
     /// <summary>
-    /// Defines most helper methods to manage the deadman's switch
+    ///     Defines most helper methods to manage the deadman's switch
     /// </summary>
-    class SwitchControl
+    internal class SwitchControl
     {
         public static void Reset()
         {
@@ -28,9 +22,7 @@ namespace Seppuku.Switch
         public static void Trigger()
         {
             if (!Expired())
-            {
                 Conf.Set("FailureDate", DateTime.Now.AddMilliseconds(-1));
-            }
             Conf.Set("Triggered", true);
             Sched.UnscheduleTrigger();
             ModuleManager.Emit(EmitType.Trigger);

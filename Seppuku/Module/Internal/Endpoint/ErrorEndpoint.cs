@@ -5,12 +5,6 @@ namespace Seppuku.Module.Internal.Endpoint
 {
     public class ErrorEndpoint : IStatusCodeHandler
     {
-
-        public ErrorEndpoint()
-        {
-            
-        }
-
         public bool HandlesStatusCode(HttpStatusCode statusCode, NancyContext context)
         {
             return statusCode == HttpStatusCode.NotFound;

@@ -12,7 +12,7 @@ namespace Seppuku.Module.ModuleGetRequest
     [Export(typeof(SeppukuModule))]
     public class ModuleGetRequest : SeppukuModule
     {
-        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>()
+        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>
         {
             ["Endpoints"] = new[] {"https://google.com"}
         };

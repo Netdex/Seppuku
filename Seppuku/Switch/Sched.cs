@@ -5,9 +5,9 @@ using Quartz.Impl;
 namespace Seppuku.Switch
 {
     /// <summary>
-    /// Global scheduler for deadman's switch triggers
+    ///     Global scheduler for deadman's switch triggers
     /// </summary>
-    class Sched
+    internal class Sched
     {
         private const string GroupKey = "seppuku";
         private const string JobKey = "deadman_execution_job";
@@ -31,12 +31,12 @@ namespace Seppuku.Switch
 
         public static void ScheduleTrigger(DateTime date)
         {
-            ISimpleTrigger trigger = (ISimpleTrigger)TriggerBuilder.Create()
+            var trigger = (ISimpleTrigger) TriggerBuilder.Create()
                 .WithIdentity(TriggerKey, GroupKey)
                 .StartAt(date)
                 .ForJob(JobKey, GroupKey)
                 .Build();
-            
+
             Scheduler.ScheduleJob(TriggerJob, trigger);
         }
 

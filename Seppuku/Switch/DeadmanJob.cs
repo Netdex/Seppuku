@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Quartz;
-using Seppuku.Module;
+﻿using Quartz;
 
 namespace Seppuku.Switch
 {
-    class DeadmanJob : IJob
+    internal class DeadmanJob : IJob
     {
         public void Execute(IJobExecutionContext context)
         {

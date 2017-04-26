@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Seppuku.Module.Utility;
 
 namespace Seppuku.Module
 {
-
     public enum EmitType
     {
         Start,
@@ -21,30 +16,35 @@ namespace Seppuku.Module
     }
 
     /// <summary>
-    /// Manages all MEF extensions
-    /// 
-    /// Q: Why are you wrapping a singleton instance with static methods that just call the object methods?
-    /// A: MEF requires the array of contracts be inside an object, but I want the module manager to be
-    /// static in nature, so naturally this disaster of a design pattern arose.
-    /// 
+    ///     Manages all MEF extensions
+    ///     Q: Why are you wrapping a singleton instance with static methods that just call the object methods?
+    ///     A: MEF requires the array of contracts be inside an object, but I want the module manager to be
+    ///     static in nature, so naturally this disaster of a design pattern arose.
     /// </summary>
     public class ModuleManager
     {
         public const string AssemblyDirectory = "Modules";
-        public static readonly string AssemblyPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+
+        public static readonly string AssemblyPath = Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             AssemblyDirectory);
 
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        private static ModuleManager I => _instance ?? (_instance = new ModuleManager());
         private static ModuleManager _instance;
 
         private CompositionContainer _container;
-        [ImportMany] public Lazy<SeppukuModule>[] SeppukuModules { get; set; }
+
+        /// <summary>
+        ///     Singleton instance
+        /// </summary>
+        private static ModuleManager I => _instance ?? (_instance = new ModuleManager());
+
+        [ImportMany]
+        public Lazy<SeppukuModule>[] SeppukuModules { get; set; }
+
         public static Lazy<SeppukuModule>[] Modules => I.SeppukuModules;
 
         #region Static Singleton Wrappers
+
         public static bool Init()
         {
             return I.Initialize();
@@ -54,9 +54,11 @@ namespace Seppuku.Module
         {
             I.EmitMessage(type);
         }
+
         #endregion
 
         #region Singleton Instance Methods
+
         public bool Initialize()
         {
             try
@@ -76,12 +78,11 @@ namespace Seppuku.Module
         }
 
         /// <summary>
-        /// Send a message to all modules
+        ///     Send a message to all modules
         /// </summary>
         public void EmitMessage(EmitType type)
         {
             foreach (var tm in SeppukuModules)
-            {
                 try
                 {
                     switch (type)
@@ -99,15 +100,14 @@ namespace Seppuku.Module
                             tm.Value.OnTrigger();
                             break;
                     }
-
                 }
                 catch (Exception e)
                 {
                     C.WriteLine("`e &f[{0}]&r {1} is misbehaving!", type, tm.Value.Name);
                     Console.WriteLine(e.ToString());
                 }
-            }
         }
+
         #endregion
     }
 }

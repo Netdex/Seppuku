@@ -1,30 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Nancy;
 using Nancy.Hosting.Self;
 using Seppuku.Config;
-using Seppuku.Module.Utility;
 
 namespace Seppuku.Module.Internal
 {
     [Export(typeof(SeppukuModule))]
-    class ModuleWebAPI : SeppukuModule
+    internal class ModuleWebAPI : SeppukuModule
     {
         private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
 
         private NancyHost _host;
+
         public ModuleWebAPI() : base("ModuleWebAPI", "Enables the web api", DefaultConf)
         {
-
         }
 
         public override void OnStart()
         {
-            int port = (int) Conf.Get<long>("Port", 19007);
+            var port = (int) Conf.Get<long>("Port", 19007);
             // run the web api
             _host = new NancyHost(new DefaultNancyBootstrapper(), new HostConfiguration
             {
@@ -36,7 +32,6 @@ namespace Seppuku.Module.Internal
 
         public override void OnTrigger()
         {
-            
         }
 
         public override void OnStop()

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Nancy;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,16 +7,15 @@ using Seppuku.Switch;
 namespace Seppuku.Module.Internal.Endpoint
 {
     /// <summary>
-    /// Defines all web api endpoints
+    ///     Defines all web api endpoints
     /// </summary>
     public class IndexEndpoint : NancyModule
     {
-
         public IndexEndpoint()
         {
             Get["/"] = _ =>
             {
-                JObject jo = new JObject
+                var jo = new JObject
                 {
                     ["application"] = Assembly.GetExecutingAssembly().GetName().Name,
                     ["version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString()
@@ -29,7 +26,7 @@ namespace Seppuku.Module.Internal.Endpoint
             Get["/remain"] = _ =>
             {
                 var timeleft = SwitchControl.TimeLeft();
-                JObject jo = new JObject();
+                var jo = new JObject();
                 if (SwitchControl.Expired())
                 {
                     jo["verbose"] = "expired";
@@ -43,10 +40,10 @@ namespace Seppuku.Module.Internal.Endpoint
                 return Response.AsText(jo.ToString(Formatting.None));
             };
 
-            Get["/reset/{secret}"] = param =>
+            Get["/reset/{token}"] = param =>
             {
-                JObject jo = new JObject();
-                if (SwitchControl.Authorized(param.secret))
+                var jo = new JObject();
+                if (SwitchControl.Authorized(param.token))
                 {
                     if (SwitchControl.Expired())
                     {
@@ -68,10 +65,10 @@ namespace Seppuku.Module.Internal.Endpoint
                 return Response.AsText(jo.ToString(Formatting.None));
             };
 
-            Get["/trigger/{secret}"] = param =>
+            Get["/trigger/{token}"] = param =>
             {
-                JObject jo = new JObject();
-                if (SwitchControl.Authorized(param.secret))
+                var jo = new JObject();
+                if (SwitchControl.Authorized(param.token))
                 {
                     if (SwitchControl.Expired())
                     {
@@ -96,7 +93,7 @@ namespace Seppuku.Module.Internal.Endpoint
 #if DEBUG
             Get["/debug/reset"] = _ =>
             {
-                JObject jo = new JObject();
+                var jo = new JObject();
                 SwitchControl.Reset();
                 jo["debug"] = 1;
                 jo["verbose"] = "reset successful";
@@ -105,7 +102,7 @@ namespace Seppuku.Module.Internal.Endpoint
             };
             Get["/debug/trigger"] = _ =>
             {
-                JObject jo = new JObject();
+                var jo = new JObject();
                 SwitchControl.Trigger();
                 jo["debug"] = 1;
                 jo["verbose"] = "trigger successful";
