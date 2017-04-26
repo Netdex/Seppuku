@@ -27,9 +27,13 @@ namespace Seppuku.Module.Internal
 
         public override void OnTrigger()
         {
-            Log("Deadman switch triggered");
+            Log("Deadman's switch triggered");
         }
 
+        public override void OnReset()
+        {
+            Log("Deadman's switch reset");
+        }
         public override void OnStop()
         {
             Log("Modules stopped");

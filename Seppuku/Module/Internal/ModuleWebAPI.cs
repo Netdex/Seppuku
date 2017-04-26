@@ -24,7 +24,7 @@ namespace Seppuku.Module.Internal
 
         public override void OnStart()
         {
-            int port = Conf.Get("Port", 19007);
+            int port = (int) Conf.Get<long>("Port", 19007);
             // run the web api
             _host = new NancyHost(new DefaultNancyBootstrapper(), new HostConfiguration
             {

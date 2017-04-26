@@ -1,20 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Seppuku.Module.Config
 {
-    /// <summary>
-    /// A hack I copied verbatim from stackoverflow to make serializing Dictionaries possible
-    /// </summary>
-    public class DictItem
-    {
-        [XmlAttribute]
-        public string ID;
-        [XmlElement]
-        public object Value;
-    }
 
     /// <summary>
     /// A glorified Dictionary to file serialization for configuration
@@ -23,9 +15,14 @@ namespace Seppuku.Module.Config
     {
         public string ConfigurationFileName { get; set; }
 
-        private readonly XmlSerializer _serializer = new XmlSerializer(typeof(DictItem[]),
-            new XmlRootAttribute() { ElementName = "items" });
         public Dictionary<string, object> Conf;
+
+        public T Get<T>(string key, T def) => Conf.ContainsKey(key) ? (T)Conf[key] : def;
+        public void Set<T>(string key, T val)
+        {
+            Conf[key] = val;
+            Save();
+        }
 
         public TypeConf(string file)
         {
@@ -45,31 +42,37 @@ namespace Seppuku.Module.Config
 
         public bool Load()
         {
+            FileStream strm = null;
             try
             {
-                var strm = File.OpenRead(ConfigurationFileName);
-                Conf = ((DictItem[])_serializer.Deserialize(strm))
-                    .ToDictionary(i => i.ID, i => i.Value);
+                strm = File.Open(ConfigurationFileName, FileMode.Open, FileAccess.Read);
+                using (var sr = new StreamReader(strm))
+                    Conf = JsonConvert.DeserializeObject<Dictionary<string, object>>(sr.ReadToEnd(),
+                        new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
                 strm.Close();
                 return Conf != null;
             }
             catch
             {
+                strm?.Close();
                 return false;
             }
         }
 
         public bool Save()
         {
+            FileStream strm = null;
             try
             {
-                var strm = File.OpenWrite(ConfigurationFileName);
-                _serializer.Serialize(strm, Conf.Select(kv => new DictItem() { ID = kv.Key, Value = kv.Value }).ToArray());
-                strm.Close();
+                strm = File.Open(ConfigurationFileName, FileMode.Create, FileAccess.Write);
+                using (var sw = new StreamWriter(strm))
+                    sw.Write(JsonConvert.SerializeObject(Conf, typeof(object), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto, Formatting = Formatting.Indented }));
+                    strm.Close();
                 return true;
             }
             catch
             {
+                strm?.Close();
                 return false;
             }
         }

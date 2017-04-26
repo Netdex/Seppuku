@@ -11,17 +11,52 @@ using Seppuku.Module.Utility;
 
 namespace Seppuku.Module
 {
-    class ModuleManager
+
+    public enum EmitType
+    {
+        Start,
+        Stop,
+        Trigger,
+        Reset
+    }
+
+    /// <summary>
+    /// Manages all MEF extensions
+    /// 
+    /// Q: Why are you wrapping a singleton instance with static methods that just call the object methods?
+    /// A: MEF requires the array of contracts be inside an object, but I want the module manager to be
+    /// static in nature, so naturally this disaster of a design pattern arose.
+    /// 
+    /// </summary>
+    public class ModuleManager
     {
         public const string AssemblyDirectory = "Modules";
         public static readonly string AssemblyPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             AssemblyDirectory);
-        public static ModuleManager Instance => _instance ?? (_instance = new ModuleManager());
+
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
+        private static ModuleManager I => _instance ?? (_instance = new ModuleManager());
         private static ModuleManager _instance;
 
         private CompositionContainer _container;
-        [ImportMany] public Lazy<SeppukuModule>[] TriggerModules { get; set; }
+        [ImportMany] public Lazy<SeppukuModule>[] SeppukuModules { get; set; }
+        public static Lazy<SeppukuModule>[] Modules => I.SeppukuModules;
 
+        #region Static Singleton Wrappers
+        public static bool Init()
+        {
+            return I.Initialize();
+        }
+
+        public static void Emit(EmitType type)
+        {
+            I.EmitMessage(type);
+        }
+        #endregion
+
+        #region Singleton Instance Methods
         public bool Initialize()
         {
             try
@@ -29,7 +64,7 @@ namespace Seppuku.Module
                 Directory.CreateDirectory(AssemblyPath);
                 var catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-                catalog.Catalogs.Add(new DirectoryCatalog(AssemblyPath, "*.dll"));
+                catalog.Catalogs.Add(new DirectoryCatalog(AssemblyPath, "Seppuku.Module.*.dll"));
                 _container = new CompositionContainer(catalog);
                 _container.ComposeParts(this);
             }
@@ -41,62 +76,38 @@ namespace Seppuku.Module
         }
 
         /// <summary>
-        /// Send a start message to all modules
-        /// For initialization of module resources
+        /// Send a message to all modules
         /// </summary>
-        public void EmitStart()
+        public void EmitMessage(EmitType type)
         {
-
-            foreach (var tm in TriggerModules)
+            foreach (var tm in SeppukuModules)
             {
                 try
                 {
-                    tm.Value.OnStart();
-                }
-                catch
-                {
-                    C.WriteLine($"`e {tm.Value.Name} is misbehaving!");
-                }
-            }
+                    switch (type)
+                    {
+                        case EmitType.Start:
+                            tm.Value.OnStart();
+                            break;
+                        case EmitType.Stop:
+                            tm.Value.OnStop();
+                            break;
+                        case EmitType.Reset:
+                            tm.Value.OnReset();
+                            break;
+                        case EmitType.Trigger:
+                            tm.Value.OnTrigger();
+                            break;
+                    }
 
-        }
-
-        /// <summary>
-        /// Send a trigger message to all modules
-        /// For execution of deadman's switch functionality
-        /// </summary>
-        public void EmitTrigger()
-        {
-            foreach (var tm in TriggerModules)
-            {
-                try
-                {
-                    tm.Value.OnTrigger();
                 }
-                catch
+                catch (Exception e)
                 {
-                    C.WriteLine($"`e {tm.Value.Name} is misbehaving!");
+                    C.WriteLine("`e &f[{0}]&r {1} is misbehaving!", type, tm.Value.Name);
+                    Console.WriteLine(e.ToString());
                 }
             }
         }
-
-        /// <summary>
-        /// Send a program terminated message to all modules
-        /// For cleanup of module resources
-        /// </summary>
-        public void EmitStop()
-        {
-            foreach (var tm in TriggerModules)
-            {
-                try
-                {
-                    tm.Value.OnStop();
-                }
-                catch
-                {
-                    C.WriteLine($"`e {tm.Value.Name} is misbehaving!");
-                }
-            }
-        }
+        #endregion
     }
 }

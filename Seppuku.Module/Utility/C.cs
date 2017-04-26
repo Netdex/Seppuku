@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using JetBrains.Annotations;
 
 namespace Seppuku.Module.Utility
 {
@@ -12,22 +14,30 @@ namespace Seppuku.Module.Utility
             ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.White
         };
 
+        private static readonly char[] SpecialCharacters = {
+            '`', '$', '&'
+        };
+
         private static readonly object syncLock = new object();
 
-        public static void Write(string f)
+        [StringFormatMethod("format")]
+        public static void Write(string format, params object[] param)
         {
+            // escape all parameters
+            format = Format(format, param);
+
             lock (syncLock)
             {
-                for (int i = 0; i < f.Length; i++)
+                for (int i = 0; i < format.Length; i++)
                 {
-                    switch (f[i])
+                    switch (format[i])
                     {
                         case '&':
                         case '$':
                         {
-                            if (i == f.Length - 1)
+                            if (i == format.Length - 1)
                                 throw new FormatException("Invalid position of color change character");
-                            char fmtc = f[i + 1];
+                            char fmtc = format[i + 1];
                             if (fmtc == 'r')
                             {
                                 Console.ResetColor();
@@ -36,7 +46,7 @@ namespace Seppuku.Module.Utility
                             {
                                 int cv = HexCharToInt(fmtc);
                                 if (cv == -1) throw new FormatException("Invalid color code");
-                                if (f[i] == '&')
+                                if (format[i] == '&')
                                     Console.ForegroundColor = ColorMap[cv];
                                 else
                                     Console.BackgroundColor = ColorMap[cv];
@@ -46,21 +56,19 @@ namespace Seppuku.Module.Utility
                             break;
                         case '`':
                         {
-                            if (i == f.Length - 1)
+                            if (i == format.Length - 1)
                                 throw new FormatException("Invalid position of color change character");
-                            char fmtc = f[i + 1];
+                            char fmtc = format[i + 1];
                             if (fmtc == 'i')
                             {
                                 Write("&b[i]&r");
                             }
                             else if (fmtc == 'w')
                             {
-                                Console.Beep();
                                 Write("&e[!]&r");
                             }
                             else if (fmtc == 'e')
                             {
-                                Console.Beep();
                                 Write("&c[!]&r");
                             }
                             else if (fmtc == 'h')
@@ -75,16 +83,17 @@ namespace Seppuku.Module.Utility
                         }
                             break;
                         default:
-                            Console.Write(f[i]);
+                            Console.Write(format[i]);
                             break;
                     }
                 }
             }
         }
 
-        public static void WriteLine(string f)
+        [StringFormatMethod("format")]
+        public static void WriteLine(string format, params object[] param)
         {
-            Write(f + '\n');
+            Write(format + '\n', param);
         }
 
         public static void Write(object o)
@@ -97,6 +106,15 @@ namespace Seppuku.Module.Utility
             WriteLine(o.ToString());
         }
 
+        [StringFormatMethod("format")]
+        public static string Format(string format, params object[] param)
+        {
+            object[] esc = new object[param.Length];
+            for (int i = 0; i < param.Length; i++)
+                esc[i] = Escape(param[i].ToString());
+
+            return string.Format(format, esc);
+        }
         public static void ClearLine()
         {
             int currentLineCursor = Console.CursorTop;
@@ -125,6 +143,25 @@ namespace Seppuku.Module.Utility
         {
             WriteLine("\n`h[CONTINUE]&r");
             Console.ReadKey();
+        }
+
+        public static string Escape(string s)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in s)
+            {
+                bool valid = true;
+                foreach (char p in SpecialCharacters)
+                {
+                    if (c == p)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid) sb.Append(c);
+            }
+            return sb.ToString();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Seppuku.Module.Config;
 using Seppuku.Module.Utility;
 
@@ -29,19 +30,30 @@ namespace Seppuku.Module
             var confPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 ModuleConfigDirectory);
             Directory.CreateDirectory(confPath);
-            ModuleConfigPath = Path.Combine(confPath, GetType().FullName + ".xml");
+            ModuleConfigPath = Path.Combine(confPath, GetType().FullName + ".json");
             Configuration = new TypeConf(ModuleConfigPath);
             Configuration.Initialize(defaultConf);
         }
         
 
-        public abstract void OnStart();
-        public abstract void OnTrigger();
-        public abstract void OnStop();
+        public virtual void OnStart() { }
+        public virtual void OnTrigger() { }
+        public virtual void OnReset() { }
+        public virtual void OnStop() { }
 
-        public void Log(string s)
+
+        [StringFormatMethod("format")]
+        public void Log(string format, params object[] param)
         {
-            C.WriteLine($"&a{$"[{Name}]",20} &f{s}&r");
+            format = string.Format(format, param);
+            try
+            {
+                C.WriteLine("&7<{0}>&r &a{1,20} &f{2}&r", DateTime.Now.TimeOfDay, $"[{Name}]".Truncate(20), format);
+            }
+            catch
+            {
+                C.WriteLine("`e Invalid formatting in message from {0}", Name);
+            }
         }
     }
 }

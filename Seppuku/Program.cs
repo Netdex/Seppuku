@@ -27,16 +27,17 @@ namespace Seppuku
 
             // load global configuration
             if (Conf.Init())
-                C.WriteLine($"`w Configuration file did not exist or was corrupted, created {Conf.ConfigurationFileName}");
-            C.WriteLine($"`i Secret key is &f{Conf.Get<string>("Secret", null)}&r, today's auth token is &f{SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", null))}&r");
+                C.WriteLine("`w Configuration file did not exist or was corrupted, created {0}", Conf.ConfigurationFileName);
+            C.WriteLine("`i Secret key is &f{0}&r, today's auth token is &f{1}&r",
+                Conf.Get<string>("Secret", null), SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", null)));
 
             // load scheduling information from global configuration
             Sched.Initialize();
-            C.WriteLine($"`i Scheduled failsafe activation date at &f{Conf.Get<DateTime?>("FailureDate", null)}&r");
-            C.WriteLine($"`i Current failsafe grace delay is &f{TimeSpan.FromSeconds(Conf.Get("GraceTime", Double.MinValue))}&r");
+            C.WriteLine("`i Scheduled failsafe activation date at &f{0}&r", Conf.Get<DateTime?>("FailureDate", null));
+            C.WriteLine("`i Current failsafe grace delay is &f{0}&r", TimeSpan.FromSeconds(Conf.Get("GraceTime", Double.MinValue)));
             if (SwitchControl.Triggered())
             {
-                C.WriteLine($"`e Switch is already expired! No scheduling will occur.");
+                C.WriteLine("`e Switch is already expired! No scheduling will occur.");
             }
             else
             {
@@ -46,26 +47,26 @@ namespace Seppuku
             Console.WriteLine();
 
             // load modules from internal and directory
-            if (ModuleManager.Instance.Initialize())
+            if (ModuleManager.Init())
             {
                 C.WriteLine("`i Loaded modules: ");
-                foreach (var mod in ModuleManager.Instance.TriggerModules)
+                foreach (var mod in ModuleManager.Modules)
                 {
-                    C.WriteLine($"&a{$"[{mod.Value.Name}]",20}&r - &f{mod.Value.Description}&r");
+                    C.WriteLine("&a{0,20}&r - &f{1}&r", $"[{mod.Value.Name}]", mod.Value.Description);
                 }
             }
             else
             {
-                C.WriteLine($"`e Failed to load modules from assembly location!");
+                C.WriteLine("`e Failed to load modules from assembly location!");
                 return;
             }
             Console.WriteLine();
 
             // run and bind all the handlers for the modules
-            ModuleManager.Instance.EmitStart();
+            ModuleManager.Emit(EmitType.Start);
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
-                ModuleManager.Instance.EmitStop();
+                ModuleManager.Emit(EmitType.Stop);
             };
             Console.WriteLine();
         }

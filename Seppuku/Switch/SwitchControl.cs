@@ -22,6 +22,7 @@ namespace Seppuku.Switch
             Conf.Set("Triggered", false);
             Sched.UnscheduleTrigger();
             Sched.ScheduleTrigger(Conf.Get("FailureDate", DateTime.MaxValue));
+            ModuleManager.Emit(EmitType.Reset);
         }
 
         public static void Trigger()
@@ -32,7 +33,7 @@ namespace Seppuku.Switch
             }
             Conf.Set("Triggered", true);
             Sched.UnscheduleTrigger();
-            ModuleManager.Instance.EmitTrigger();
+            ModuleManager.Emit(EmitType.Trigger);
         }
 
         public static TimeSpan TimeLeft()
