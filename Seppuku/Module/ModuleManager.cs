@@ -45,15 +45,8 @@ namespace Seppuku.Module
 
         #region Static Singleton Wrappers
 
-        public static bool Init()
-        {
-            return I.Initialize();
-        }
-
-        public static void Emit(EmitType type)
-        {
-            I.EmitMessage(type);
-        }
+        public static bool Init() => I.Initialize();
+        public static void Emit(EmitType type) => I.EmitMessage(type);
 
         #endregion
 
