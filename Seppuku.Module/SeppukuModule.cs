@@ -48,7 +48,7 @@ namespace Seppuku.Module
             format = string.Format(format, param);
             try
             {
-                C.WriteLine("&7<{0}>&r &a{1,20} &f{2}&r", DateTime.Now.TimeOfDay, $"[{Name}]".Truncate(20), format);
+                C.WriteLine("&7<{0}>&r &a{1,20} &f{2}&r", DateTime.Now, $"[{Name}]".Truncate(20), format);
             }
             catch
             {

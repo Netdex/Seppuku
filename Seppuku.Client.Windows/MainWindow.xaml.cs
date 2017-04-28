@@ -165,6 +165,9 @@ namespace Seppuku.Client.Windows
                     if ((int)data["status"] == -1)
                     {
                         NotificationIcon.ShowBalloonTip(5000, "Seppuku Failure", "Deadman's switch has activated!", ToolTipIcon.Error);
+                    }else if ((int) data["status"] == -999)
+                    {
+                        NotificationIcon.ShowBalloonTip(5000, "Seppuku Failure", "The authorization token is invalid!", ToolTipIcon.Error);
                     }
                 }
             });

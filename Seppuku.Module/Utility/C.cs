@@ -19,13 +19,15 @@ namespace Seppuku.Module.Utility
         };
 
         private static readonly object syncLock = new object();
+        public static bool AppendDate { get; set; } = false;
 
         [StringFormatMethod("format")]
-        public static void Write(string format, params object[] param)
+        public static void Write(string format, bool inner = false, params object[] param)
         {
             // escape all parameters
             format = Format(format, param);
-
+            if (AppendDate && !inner)
+                format = $"&7<{DateTime.Now}>&r " + format;
             lock (syncLock)
             {
                 for (int i = 0; i < format.Length; i++)
@@ -61,19 +63,19 @@ namespace Seppuku.Module.Utility
                             char fmtc = format[i + 1];
                             if (fmtc == 'i')
                             {
-                                Write("&b[i]&r");
+                                Write("&b[i]&r", true);
                             }
                             else if (fmtc == 'w')
                             {
-                                Write("&e[!]&r");
+                                Write("&e[!]&r", true);
                             }
                             else if (fmtc == 'e')
                             {
-                                Write("&c[!]&r");
+                                Write("&c[!]&r", true);
                             }
                             else if (fmtc == 'h')
                             {
-                                Write("&0$7");
+                                Write("&0$7", true);
                             }
                             else
                             {
@@ -93,7 +95,7 @@ namespace Seppuku.Module.Utility
         [StringFormatMethod("format")]
         public static void WriteLine(string format, params object[] param)
         {
-            Write(format + '\n', param);
+            Write(format + '\n', false, param);
         }
 
         public static void Write(object o)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using Seppuku.Module.Config;
 
@@ -18,7 +20,7 @@ namespace Seppuku.Config
         /// <summary>
         ///     Singleton instance
         /// </summary>
-        private static TypeConf I => _instance ?? (_instance = new TypeConf(ConfigurationFileName));
+        private static TypeConf I => _instance ?? (_instance = new TypeConf(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ConfigurationFileName)));
 
         public static T Get<T>(string key, T def)
         {
