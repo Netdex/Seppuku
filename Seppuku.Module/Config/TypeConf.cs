@@ -23,6 +23,11 @@ namespace Seppuku.Module.Config
             return Conf.ContainsKey(key) ? (T) Conf[key] : def;
         }
 
+        public T Get<T>(string key, Dictionary<string, object> defaults)
+        {
+            return Get(key, (T)defaults[key]);
+        }
+
         public void Set<T>(string key, T val)
         {
             Conf[key] = val;

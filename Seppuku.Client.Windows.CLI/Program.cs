@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
@@ -13,7 +9,6 @@ using Quartz;
 using Quartz.Impl;
 using Seppuku.Module.Config;
 using Seppuku.Module.Utility;
-using Microsoft.Win32;
 
 namespace Seppuku.Client.Windows.CLI
 {
@@ -75,7 +70,8 @@ namespace Seppuku.Client.Windows.CLI
             {
                 Icon = Properties.Resources.seppuku,
                 Visible = true,
-                ContextMenu = notifyContextMenu
+                ContextMenu = notifyContextMenu,
+                Text = Application.ProductName + " " + Application.ProductVersion
             };
             C.WriteLine("`i initialized windows forms data");
         }
@@ -135,10 +131,10 @@ namespace Seppuku.Client.Windows.CLI
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        static bool SetCnslVisibility(int nCmdShow)
+        static void SetCnslVisibility(int nCmdShow)
         {
             CnslState = nCmdShow;
-            return ShowWindow(ConsoleHndl, nCmdShow);
+            ShowWindow(ConsoleHndl, nCmdShow);
         }
 
         const int SW_HIDE = 0;

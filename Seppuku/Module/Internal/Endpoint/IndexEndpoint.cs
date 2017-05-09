@@ -18,7 +18,8 @@ namespace Seppuku.Module.Internal.Endpoint
                 var jo = new JObject
                 {
                     ["application"] = Assembly.GetExecutingAssembly().GetName().Name,
-                    ["version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString()
+                    ["version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                    ["description"] = "automated digital deadman's switch and executor"
                 };
                 return Response.AsText(jo.ToString(Formatting.None));
             };
