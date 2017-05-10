@@ -15,7 +15,8 @@ namespace Seppuku.Module.Utility
             return Convert.ToBase64String(
                 sha1.ComputeHash(
                     Encoding.ASCII.GetBytes(
-                        secret + DateTime.UtcNow.Date)));
+                        secret + DateTime.UtcNow.Date)))
+                        .Replace('+','-').Replace('/','_').Replace('=','.');
         }
     }
 }

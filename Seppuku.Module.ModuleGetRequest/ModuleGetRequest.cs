@@ -29,7 +29,7 @@ namespace Seppuku.Module.ModuleGetRequest
         public override void OnTrigger()
         {
             var webClient = new WebClient();
-            foreach (string uri in Configuration.Get<string[]>("Endpoints", null))
+            foreach (string uri in Configuration.Get<string[]>("Endpoints", DefaultConf))
             {
                 Log("Firing get request to {0}", uri);
                 webClient.DownloadString(uri);
