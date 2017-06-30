@@ -12,7 +12,7 @@ namespace Seppuku.Switch
     {
         public static void Reset()
         {
-            Conf.Set("FailureDate", DateTime.Now.AddSeconds(Conf.Get("GraceTime", double.MaxValue)));
+            Conf.Set("FailureDate", DateTime.Now.AddSeconds(Conf.Get<double>("GraceTime", Conf.DefaultConf)));
             Conf.Set("Triggered", false);
             Sched.UnscheduleTrigger();
             Sched.ScheduleTrigger(Conf.Get("FailureDate", DateTime.MaxValue));
@@ -45,7 +45,7 @@ namespace Seppuku.Switch
 
         public static bool Authorized(string secret)
         {
-            return secret == SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", null));
+            return secret == SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", Conf.DefaultConf));
         }
     }
 }

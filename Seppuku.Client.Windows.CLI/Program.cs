@@ -82,7 +82,7 @@ namespace Seppuku.Client.Windows.CLI
             RegistryKey rk = Registry.CurrentUser.OpenSubKey
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (startup)
-                rk.SetValue(Assembly.GetExecutingAssembly().FullName, Application.ExecutablePath.ToString());
+                rk.SetValue(Application.ProductName, $"\"{Application.ExecutablePath}\"");
             else
                 rk.DeleteValue(Assembly.GetExecutingAssembly().FullName, false);
             C.WriteLine("`i set startup registry key");

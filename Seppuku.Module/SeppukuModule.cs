@@ -21,11 +21,13 @@ namespace Seppuku.Module
         public string ModuleConfigPath;
         public TypeConf Configuration;
 
+        public readonly Dictionary<string, object> DefaultConf;
 
         protected SeppukuModule(string name, string description, Dictionary<string, object> defaultConf) 
         {
             Name = name;
             Description = description;
+            DefaultConf = defaultConf;
 
             var confPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 ModuleConfigDirectory);

@@ -12,18 +12,20 @@ namespace Seppuku.Module.ModuleGetRequest
     [Export(typeof(SeppukuModule))]
     public class ModuleGetRequest : SeppukuModule
     {
-        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>
-        {
-            ["Endpoints"] = new[] {"https://google.com"}
-        };
 
-        public ModuleGetRequest() : base("ModuleGetRequest", "Fires a get request to every endpoint specified", DefaultConf)
+        public ModuleGetRequest() : base(
+            "ModuleGetRequest", 
+            "Fires a get request to every endpoint specified", 
+            new Dictionary<string, object>
+            {
+                ["Endpoints"] = new[] { "https://google.com" }
+            })
         {
         }
 
         public override void OnStart()
         {
-            
+
         }
 
         public override void OnTrigger()
@@ -38,7 +40,7 @@ namespace Seppuku.Module.ModuleGetRequest
 
         public override void OnStop()
         {
-            
+
         }
     }
 }

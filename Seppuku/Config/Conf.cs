@@ -14,6 +14,7 @@ namespace Seppuku.Config
     {
         public const string ConfigurationFileName = "seppuku.json";
         private static TypeConf _instance;
+        public static Dictionary<string, object> DefaultConf;
 
         private static readonly RandomNumberGenerator Random = RandomNumberGenerator.Create();
 
@@ -22,27 +23,21 @@ namespace Seppuku.Config
         /// </summary>
         private static TypeConf I => _instance ?? (_instance = new TypeConf(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ConfigurationFileName)));
 
-        public static T Get<T>(string key, T def)
-        {
-            return I.Get(key, def);
-        }
-
-        public static void Set<T>(string key, T val)
-        {
-            I.Set(key, val);
-        }
+        public static T Get<T>(string key, T def)=> I.Get(key, def);
+        public static T Get<T>(string key, Dictionary<string, object> defaults) => I.Get<T>(key, defaults);
+        public static void Set<T>(string key, T val)=> I.Set(key, val);
 
         public static bool Init()
         {
-            var defaultConf = new Dictionary<string, object>
+            DefaultConf = new Dictionary<string, object>
             {
                 ["GraceTime"] = TimeSpan.FromDays(30).TotalSeconds,
                 ["Port"] = 19007L,
                 ["Secret"] = RandomString(16)
             };
-            defaultConf["FailureDate"] = DateTime.Now.AddSeconds((double) defaultConf["GraceTime"]);
+            DefaultConf["FailureDate"] = DateTime.Now.AddSeconds((double)DefaultConf["GraceTime"]);
 
-            return I.Initialize(defaultConf);
+            return I.Initialize(DefaultConf);
         }
 
         public static string RandomString(int length)
