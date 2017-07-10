@@ -1,7 +1,7 @@
 ﻿using Nancy;
 using Nancy.ErrorHandling;
 
-namespace Seppuku.Module.Internal.Endpoint
+namespace Seppuku.Module.Internal.ModuleWebAPI.Endpoint
 {
     public class ErrorEndpoint : IStatusCodeHandler
     {

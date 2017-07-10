@@ -21,7 +21,7 @@ namespace Seppuku.Switch
 
         public static void Trigger()
         {
-            if (!Expired())
+            if (!IsExpired)
                 Conf.Set("FailureDate", DateTime.Now.AddMilliseconds(-1));
             Conf.Set("Triggered", true);
             Sched.UnscheduleTrigger();
@@ -33,19 +33,10 @@ namespace Seppuku.Switch
             return Conf.Get("FailureDate", DateTime.Now) - DateTime.Now;
         }
 
-        public static bool Expired()
-        {
-            return TimeLeft() < TimeSpan.Zero;
-        }
+        public static bool IsExpired => TimeLeft() < TimeSpan.Zero;
+        public static bool IsTriggered => Conf.Get("Triggered", false);
+        public static bool IsAuthorized(string secret) =>
+            secret == SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", Conf.DefaultConf));
 
-        public static bool Triggered()
-        {
-            return Conf.Get("Triggered", false);
-        }
-
-        public static bool Authorized(string secret)
-        {
-            return secret == SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", Conf.DefaultConf));
-        }
     }
 }

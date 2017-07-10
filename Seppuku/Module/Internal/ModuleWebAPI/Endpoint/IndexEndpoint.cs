@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 using Nancy;
+using Nancy.Extensions;
+using Nancy.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Seppuku.Switch;
 
-namespace Seppuku.Module.Internal.Endpoint
+namespace Seppuku.Module.Internal.ModuleWebAPI.Endpoint
 {
     /// <summary>
     ///     Defines all web api endpoints
@@ -26,9 +28,10 @@ namespace Seppuku.Module.Internal.Endpoint
 
             Get["/remain"] = _ =>
             {
+                this.RequiresAuthentication();
                 var timeleft = SwitchControl.TimeLeft();
                 var jo = new JObject();
-                if (SwitchControl.Expired())
+                if (SwitchControl.IsExpired)
                 {
                     jo["verbose"] = "expired";
                     jo["remaining"] = 0;
@@ -44,9 +47,9 @@ namespace Seppuku.Module.Internal.Endpoint
             Get["/reset/{token}"] = param =>
             {
                 var jo = new JObject();
-                if (SwitchControl.Authorized(param.token))
+                if (SwitchControl.IsAuthorized(param.token))
                 {
-                    if (SwitchControl.Expired())
+                    if (SwitchControl.IsExpired)
                     {
                         jo["verbose"] = "cannot reset expired timer";
                         jo["status"] = -1;
@@ -69,9 +72,9 @@ namespace Seppuku.Module.Internal.Endpoint
             Get["/trigger/{token}"] = param =>
             {
                 var jo = new JObject();
-                if (SwitchControl.Authorized(param.token))
+                if (SwitchControl.IsAuthorized(param.token))
                 {
-                    if (SwitchControl.Expired())
+                    if (SwitchControl.IsExpired)
                     {
                         jo["verbose"] = "cannot trigger expired timer";
                         jo["status"] = -1;

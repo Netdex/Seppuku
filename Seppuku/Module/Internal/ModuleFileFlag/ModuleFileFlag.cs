@@ -16,13 +16,11 @@ namespace Seppuku.Module.Internal
     [Export(typeof(SeppukuModule))]
     public class ModuleFileFlag : SeppukuModule
     {
-        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>()
+        public ModuleFileFlag() : base("ModuleFileFlag", "Creates file flags for other programs to look at", new Dictionary<string, object>()
         {
             ["RunningFlagFileName"] = "running",
             ["TriggerFlagFileName"] = "trigger"
-        };
-
-        public ModuleFileFlag() : base("ModuleFileFlag", "Creates file flags for other programs to look at", DefaultConf)
+        })
         {
         }
 

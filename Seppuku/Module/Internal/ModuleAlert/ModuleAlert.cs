@@ -9,9 +9,7 @@ namespace Seppuku.Module.Internal
     [Export(typeof(SeppukuModule))]
     public class ModuleAlert : SeppukuModule
     {
-        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
-
-        public ModuleAlert() : base("ModuleAlert", "Default test module", DefaultConf)
+        public ModuleAlert() : base("ModuleAlert", "Default test module", new Dictionary<string, object>())
         {
         }
 

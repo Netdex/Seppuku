@@ -5,24 +5,23 @@ using Nancy;
 using Nancy.Hosting.Self;
 using Seppuku.Config;
 
-namespace Seppuku.Module.Internal
+namespace Seppuku.Module.Internal.ModuleWebAPI
 {
     [Export(typeof(SeppukuModule))]
     internal class ModuleWebAPI : SeppukuModule
     {
-        private static readonly Dictionary<string, object> DefaultConf = new Dictionary<string, object>();
-
         private NancyHost _host;
 
-        public ModuleWebAPI() : base("ModuleWebAPI", "Enables the web api", DefaultConf)
+        public ModuleWebAPI() : base("ModuleWebAPI", "Enables the web api", new Dictionary<string, object>())
         {
+            
         }
 
         public override void OnStart()
         {
             var port = (int) Conf.Get<long>("Port", 19007);
             // run the web api
-            _host = new NancyHost(new DefaultNancyBootstrapper(), new HostConfiguration
+            _host = new NancyHost(new AuthenticationBootstrapper(), new HostConfiguration
             {
                 RewriteLocalhost = true
             }, new Uri($"http://localhost:{port}"));

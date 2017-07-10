@@ -26,7 +26,10 @@ namespace Seppuku
             C.WriteLine("`i Scheduled failsafe activation date at &f{0}&r", Conf.Get<DateTime>("FailureDate", Conf.DefaultConf));
             C.WriteLine("`i Current failsafe grace delay is &f{0}&r",
                 TimeSpan.FromSeconds(Conf.Get<double>("GraceTime", Conf.DefaultConf)));
-            if (SwitchControl.Triggered())
+            if(SwitchControl.IsExpired)
+                SwitchControl.Trigger();
+
+            if (SwitchControl.IsTriggered)
                 C.WriteLine("`e Switch is already expired! No scheduling will occur.");
             else
                 Sched.ScheduleTrigger(Conf.Get<DateTime>("FailureDate", Conf.DefaultConf));
