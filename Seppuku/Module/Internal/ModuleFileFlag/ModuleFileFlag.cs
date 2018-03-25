@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Seppuku.Switch;
 
-namespace Seppuku.Module.Internal
+namespace Seppuku.Module.Internal.ModuleFileFlag
 {
     /// <summary>
     ///     Maintains a flag in the form of a file that other programs can access

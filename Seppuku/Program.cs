@@ -15,24 +15,17 @@ namespace Seppuku
             C.WriteLine(Resources.Greeting);
 
             // load global configuration
-            if (Conf.Init())
+            if (Configuration.Init())
                 C.WriteLine("`w Configuration file did not exist or was corrupted, created {0}",
-                    Conf.ConfigurationFileName);
+                    Configuration.ConfigurationFileName);
             C.WriteLine("`i Secret key is &f{0}&r, today's auth token is &f{1}&r",
-                Conf.Get<string>("Secret", Conf.DefaultConf), SeppukuAuth.GetCurrentToken(Conf.Get<string>("Secret", Conf.DefaultConf)));
+                Configuration.Get<string>("Secret", Configuration.DefaultConf), SeppukuAuth.GetCurrentToken(Configuration.Get<string>("Secret", Configuration.DefaultConf)));
 
             // load scheduling information from global configuration
             Sched.Initialize();
-            C.WriteLine("`i Scheduled failsafe activation date at &f{0}&r", Conf.Get<DateTime>("FailureDate", Conf.DefaultConf));
+            C.WriteLine("`i Scheduled failsafe activation date at &f{0}&r", Configuration.Get<DateTime>("FailureDate", Configuration.DefaultConf));
             C.WriteLine("`i Current failsafe grace delay is &f{0}&r",
-                TimeSpan.FromSeconds(Conf.Get<double>("GraceTime", Conf.DefaultConf)));
-            if(SwitchControl.IsExpired)
-                SwitchControl.Trigger();
-
-            if (SwitchControl.IsTriggered)
-                C.WriteLine("`e Switch is already expired! No scheduling will occur.");
-            else
-                Sched.ScheduleTrigger(Conf.Get<DateTime>("FailureDate", Conf.DefaultConf));
+                TimeSpan.FromSeconds(Configuration.Get<double>("GraceTime", Configuration.DefaultConf)));
             Console.WriteLine();
 
             // load modules from internal and directory
@@ -47,6 +40,16 @@ namespace Seppuku
                 C.WriteLine("`e Failed to load modules from assembly location!");
                 return;
             }
+
+            Console.WriteLine();
+            
+            if (SwitchControl.IsExpired)
+                SwitchControl.Trigger();
+
+            if (SwitchControl.IsTriggered)
+                C.WriteLine("`e Switch is already expired! No scheduling will occur.");
+            else
+                Sched.ScheduleTrigger(Configuration.Get<DateTime>("FailureDate", Configuration.DefaultConf));
             Console.WriteLine();
 
             // run and bind all the handlers for the modules

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -34,7 +35,7 @@ namespace Seppuku.Client.Windows.CLI
 
         public static void InitializeConfiguration()
         {
-            Config = new TypeConf("Seppuku.Windows.Client.CLI.json");
+            Config = new TypeConf(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Seppuku.Windows.Client.CLI.json"));
             Config.Initialize(new Dictionary<string, object>
             {
                 ["Secret"] = "",
@@ -84,7 +85,7 @@ namespace Seppuku.Client.Windows.CLI
             if (startup)
                 rk.SetValue(Application.ProductName, $"\"{Application.ExecutablePath}\"");
             else
-                rk.DeleteValue(Assembly.GetExecutingAssembly().FullName, false);
+                rk.DeleteValue(Application.ProductName, false);
             C.WriteLine("`i set startup registry key");
         }
 

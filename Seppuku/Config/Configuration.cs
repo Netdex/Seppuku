@@ -10,13 +10,11 @@ namespace Seppuku.Config
     /// <summary>
     ///     General configuration endpoint for Seppuku
     /// </summary>
-    internal class Conf
+    public class Configuration
     {
         public const string ConfigurationFileName = "seppuku.json";
         private static TypeConf _instance;
         public static Dictionary<string, object> DefaultConf;
-
-        private static readonly RandomNumberGenerator Random = RandomNumberGenerator.Create();
 
         /// <summary>
         ///     Singleton instance
@@ -33,22 +31,11 @@ namespace Seppuku.Config
             {
                 ["GraceTime"] = TimeSpan.FromDays(30).TotalSeconds,
                 ["Port"] = 19007L,
-                ["Secret"] = RandomString(16)
+                ["Secret"] = Guid.NewGuid().ToString()
             };
             DefaultConf["FailureDate"] = DateTime.Now.AddSeconds((double)DefaultConf["GraceTime"]);
 
             return I.Initialize(DefaultConf);
-        }
-
-        public static string RandomString(int length)
-        {
-            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var rand = new byte[length];
-            Random.GetBytes(rand);
-            var data = new char[length];
-            for (var i = 0; i < length; i++)
-                data[i] = chars[rand[i] % chars.Length];
-            return new string(data);
         }
     }
 }

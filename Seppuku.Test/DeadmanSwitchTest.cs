@@ -1,14 +1,15 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Seppuku.Tests
+namespace Seppuku.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class DeadmanSwitchTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TriggerShouldExecuteTrigger()
         {
+            
         }
     }
 }

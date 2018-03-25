@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 
-namespace Seppuku.Module.Internal
+namespace Seppuku.Module.Internal.ModuleAlert
 {
     /// <summary>
     ///     Simple demonstration module which prints a message on every event
@@ -25,7 +26,7 @@ namespace Seppuku.Module.Internal
 
         public override void OnReset()
         {
-            Log("Deadman's switch reset");
+            Log("Reset, new trigger date is {0}", Seppuku.Config.Configuration.Get<DateTime>("FailureDate", Seppuku.Config.Configuration.DefaultConf));
         }
 
         public override void OnStop()

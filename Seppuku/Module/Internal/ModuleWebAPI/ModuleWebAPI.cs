@@ -19,11 +19,11 @@ namespace Seppuku.Module.Internal.ModuleWebAPI
 
         public override void OnStart()
         {
-            var port = (int) Conf.Get<long>("Port", 19007);
+            var port = (int) Seppuku.Config.Configuration.Get<long>("Port", 19007);
             // run the web api
-            _host = new NancyHost(new AuthenticationBootstrapper(), new HostConfiguration
+            _host = new NancyHost(new HostConfiguration
             {
-                RewriteLocalhost = true
+                RewriteLocalhost = false,
             }, new Uri($"http://localhost:{port}"));
             _host.Start();
             Log($"Running on http://localhost:{port}/");

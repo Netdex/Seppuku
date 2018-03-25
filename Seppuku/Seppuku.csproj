@@ -70,18 +70,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Module\Internal\ModuleWebAPI\AuthenticationBootstrapper.cs" />
     <Compile Include="Module\Internal\ModuleWebAPI\Endpoint\ErrorEndpoint.cs" />
     <Compile Include="Module\Internal\ModuleWebAPI\Endpoint\IndexEndpoint.cs" />
     <Compile Include="Module\Internal\ModuleAlert\ModuleAlert.cs" />
     <Compile Include="Module\Internal\ModuleFileFlag\ModuleFileFlag.cs" />
-    <Compile Include="Module\Internal\ModuleWebAPI\UserIdentity.cs" />
-    <Compile Include="Module\Internal\ModuleWebAPI\UserValidator.cs" />
     <Compile Include="Module\Internal\ModuleWebAPI\ModuleWebAPI.cs" />
     <Compile Include="Module\ModuleManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Config\Conf.cs" />
+    <Compile Include="Config\Configuration.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

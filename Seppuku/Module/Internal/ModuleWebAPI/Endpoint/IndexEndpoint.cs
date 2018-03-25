@@ -28,7 +28,6 @@ namespace Seppuku.Module.Internal.ModuleWebAPI.Endpoint
 
             Get["/remain"] = _ =>
             {
-                this.RequiresAuthentication();
                 var timeleft = SwitchControl.TimeLeft();
                 var jo = new JObject();
                 if (SwitchControl.IsExpired)
