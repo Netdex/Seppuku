@@ -12,6 +12,8 @@ namespace Seppuku.Config
     /// </summary>
     public class Configuration
     {
+        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         public const string ConfigurationFileName = "seppuku.json";
         private static TypeConf _instance;
         public static Dictionary<string, object> DefaultConf;
@@ -22,8 +24,11 @@ namespace Seppuku.Config
         private static TypeConf I => _instance ?? (_instance = new TypeConf(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ConfigurationFileName)));
 
         public static T Get<T>(string key, T def)=> I.Get(key, def);
-        public static T Get<T>(string key, Dictionary<string, object> defaults) => I.Get<T>(key, defaults);
-        public static void Set<T>(string key, T val)=> I.Set(key, val);
+        public static T Get<T>(string key) => I.Get<T>(key);
+        public static void Set<T>(string key, T val){
+            L.Trace("Setting configuration option {0}: {1}", key, val.ToString());
+            I.Set(key, val);
+        }
 
         public static bool Init()
         {

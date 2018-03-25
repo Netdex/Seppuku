@@ -1,16 +1,15 @@
-﻿&f
+﻿
     ███████╗███████╗██████╗ ██████╗ ██╗   ██╗██╗  ██╗██╗   ██╗
     ██╔════╝██╔════╝██╔══██╗██╔══██╗██║   ██║██║ ██╔╝██║   ██║
     ███████╗█████╗  ██████╔╝██████╔╝██║   ██║█████╔╝ ██║   ██║
     ╚════██║██╔══╝  ██╔═══╝ ██╔═══╝ ██║   ██║██╔═██╗ ██║   ██║
     ███████║███████╗██║     ██║     ╚██████╔╝██║  ██╗╚██████╔╝
     ╚══════╝╚══════╝╚═╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝
-&7
+
 	Although its scent still lingers on
 		the form of a flower has scattered away
 	For whom will the glory
 		of this world remain unchanged?
-&f
+
 	- Excerpt from "Iroha", translated by Professor Ryuichi Abe
 
-&r

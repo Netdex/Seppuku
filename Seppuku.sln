@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku", "Seppuku\Seppuku.csproj", "{B552CD24-4EA8-49CA-ACB4-A746D1BF581E}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Module.ModuleGetRequest", "Seppuku.Module.ModuleGetRequest\Seppuku.Module.ModuleGetRequest.csproj", "{6BC36678-671D-4629-AD8F-A70B556B2CC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Client.Windows.CLI", "Seppuku.Client.Windows.CLI\Seppuku.Client.Windows.CLI.csproj", "{34DBD95F-44A1-466E-B4E4-A2B64AEC738E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Test", "Seppuku.Test\Seppuku.Test.csproj", "{DF683926-12F0-48D0-B972-4B8A70501E36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +33,11 @@ Global
 		{34DBD95F-44A1-466E-B4E4-A2B64AEC738E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34DBD95F-44A1-466E-B4E4-A2B64AEC738E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34DBD95F-44A1-466E-B4E4-A2B64AEC738E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF683926-12F0-48D0-B972-4B8A70501E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF683926-12F0-48D0-B972-4B8A70501E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF683926-12F0-48D0-B972-4B8A70501E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF683926-12F0-48D0-B972-4B8A70501E36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C58B5166-067D-4A24-BAD3-EC0314811DE8}
 	EndGlobalSection
 EndGlobal

@@ -10,9 +10,12 @@ namespace Seppuku.Switch
     /// </summary>
     internal class SwitchControl
     {
+        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         public static void Reset()
         {
-            Configuration.Set("FailureDate", DateTime.Now.AddSeconds(Configuration.Get<double>("GraceTime", Configuration.DefaultConf)));
+            L.Trace("Resetting switch");
+            Configuration.Set("FailureDate", DateTime.Now.AddSeconds(Configuration.Get<double>("GraceTime")));
             Configuration.Set("Triggered", false);
             Sched.UnscheduleTrigger();
             Sched.ScheduleTrigger(Configuration.Get("FailureDate", DateTime.MaxValue));
@@ -21,6 +24,7 @@ namespace Seppuku.Switch
 
         public static void Trigger()
         {
+            L.Trace("Triggering switch");
             if (!IsExpired)
                 Configuration.Set("FailureDate", DateTime.Now.AddMilliseconds(-1));
             Configuration.Set("Triggered", true);
@@ -36,7 +40,7 @@ namespace Seppuku.Switch
         public static bool IsExpired => TimeLeft() < TimeSpan.Zero;
         public static bool IsTriggered => Configuration.Get("Triggered", false);
         public static bool IsAuthorized(string secret) =>
-            secret == SeppukuAuth.GetCurrentToken(Configuration.Get<string>("Secret", Configuration.DefaultConf));
+            secret == SeppukuAuth.GetCurrentToken(Configuration.Get<string>("Secret"));
 
     }
 }

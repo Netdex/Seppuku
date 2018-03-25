@@ -23,6 +23,8 @@ namespace Seppuku.Module
     /// </summary>
     public class ModuleManager
     {
+        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         public const string AssemblyDirectory = "Modules";
 
         public static readonly string AssemblyPath = Path.Combine(
@@ -96,8 +98,7 @@ namespace Seppuku.Module
                 }
                 catch (Exception e)
                 {
-                    C.WriteLine("`e &f[{0}]&r {1} is misbehaving!", type, tm.Value.Name);
-                    Console.WriteLine(e.ToString());
+                    L.Error(e, "[{0}] {1} is misbehaving!", type, tm.Value.Name);
                 }
         }
 

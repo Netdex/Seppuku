@@ -11,19 +11,22 @@ using Seppuku.Module.Utility;
 
 namespace Seppuku.Module
 {
+
     public abstract class SeppukuModule
     {
+        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         public const string ModuleConfigDirectory = "Configuration";
 
         public string Name { get; set; }
         public string Description { get; set; }
 
         public string ModuleConfigPath;
-        public TypeConf Configuration;
+        public TypeConf ModuleConfig;
 
         public readonly Dictionary<string, object> DefaultConf;
 
-        protected SeppukuModule(string name, string description, Dictionary<string, object> defaultConf) 
+        protected SeppukuModule(string name, string description, Dictionary<string, object> defaultConf)
         {
             Name = name;
             Description = description;
@@ -33,10 +36,10 @@ namespace Seppuku.Module
                 ModuleConfigDirectory);
             Directory.CreateDirectory(confPath);
             ModuleConfigPath = Path.Combine(confPath, GetType().FullName + ".json");
-            Configuration = new TypeConf(ModuleConfigPath);
-            Configuration.Initialize(defaultConf);
+            ModuleConfig = new TypeConf(ModuleConfigPath);
+            ModuleConfig.Initialize(defaultConf);
         }
-        
+
 
         public virtual void OnStart() { }
         public virtual void OnTrigger() { }
@@ -50,11 +53,11 @@ namespace Seppuku.Module
             format = string.Format(format, param);
             try
             {
-                C.WriteLine("&7<{0}>&r &a{1,20} &f{2}&r", DateTime.Now, $"[{Name}]".Truncate(20), format);
+                L.Info("{0} {1}", $"[{Name}]", format);
             }
             catch
             {
-                C.WriteLine("`e Invalid formatting in message from {0}", Name);
+                L.Error("`e Invalid formatting in message from {0}", Name);
             }
         }
     }

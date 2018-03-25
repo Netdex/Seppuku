@@ -9,6 +9,8 @@ namespace Seppuku.Switch
     /// </summary>
     internal class Sched
     {
+        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         private const string GroupKey = "seppuku";
         private const string JobKey = "deadman_execution_job";
         private const string TriggerKey = "deadman_execution_trigger";
@@ -18,6 +20,7 @@ namespace Seppuku.Switch
 
         public static bool Initialize()
         {
+            L.Trace("Initializing scheduler");
             ISchedulerFactory schedFact = new StdSchedulerFactory();
 
             Scheduler = schedFact.GetScheduler();
@@ -31,6 +34,7 @@ namespace Seppuku.Switch
 
         public static void ScheduleTrigger(DateTime date)
         {
+            L.Trace("Scheduling trigger event at {0}", date);
             var trigger = (ISimpleTrigger) TriggerBuilder.Create()
                 .WithIdentity(TriggerKey, GroupKey)
                 .StartAt(date)
@@ -42,6 +46,7 @@ namespace Seppuku.Switch
 
         public static void UnscheduleTrigger()
         {
+            L.Trace("Unscheduling trigger event");
             Scheduler.UnscheduleJob(new TriggerKey(TriggerKey, GroupKey));
         }
     }

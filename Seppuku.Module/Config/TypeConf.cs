@@ -10,6 +10,7 @@ namespace Seppuku.Module.Config
     public class TypeConf
     {
         public Dictionary<string, object> Conf;
+        public Dictionary<string, object> Defaults;
 
         public TypeConf(string file)
         {
@@ -23,9 +24,9 @@ namespace Seppuku.Module.Config
             return Conf.ContainsKey(key) ? (T) Conf[key] : def;
         }
 
-        public T Get<T>(string key, Dictionary<string, object> defaults)
+        public T Get<T>(string key)
         {
-            return Get(key, (T)defaults[key]);
+            return Get(key, (T)Defaults[key]);
         }
 
         public void Set<T>(string key, T val)
@@ -36,6 +37,8 @@ namespace Seppuku.Module.Config
 
         public bool Initialize(Dictionary<string, object> defaults)
         {
+            Defaults = new Dictionary<string, object>(defaults);
+
             var stat = Load();
             if (!stat)
             {

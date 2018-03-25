@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using Seppuku.Config;
 
 namespace Seppuku.Module.Internal.ModuleAlert
 {
@@ -26,7 +27,7 @@ namespace Seppuku.Module.Internal.ModuleAlert
 
         public override void OnReset()
         {
-            Log("Reset, new trigger date is {0}", Seppuku.Config.Configuration.Get<DateTime>("FailureDate", Seppuku.Config.Configuration.DefaultConf));
+            Log("Reset, new trigger date is {0}", Configuration.Get<DateTime>("FailureDate"));
         }
 
         public override void OnStop()

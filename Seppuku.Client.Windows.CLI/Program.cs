@@ -23,7 +23,7 @@ namespace Seppuku.Client.Windows.CLI
         {
             ConsoleHndl = GetConsoleWindow();
             SetCnslVisibility(SW_HIDE);
-            C.AppendDate = true;
+            //C.AppendDate = true;
 
             InitializeConfiguration();
             InitializeWindows();
@@ -43,7 +43,7 @@ namespace Seppuku.Client.Windows.CLI
                 ["Port"] = 19007L,
                 ["ResetInterval"] = TimeSpan.FromHours(1).TotalSeconds
             });
-            C.WriteLine("`i loaded configuration data");
+           // C.WriteLine("`i loaded configuration data");
         }
 
         public static void InitializeWindows()
@@ -74,7 +74,7 @@ namespace Seppuku.Client.Windows.CLI
                 ContextMenu = notifyContextMenu,
                 Text = Application.ProductName + " " + Application.ProductVersion
             };
-            C.WriteLine("`i initialized windows forms data");
+           // C.WriteLine("`i initialized windows forms data");
         }
 
 
@@ -86,7 +86,7 @@ namespace Seppuku.Client.Windows.CLI
                 rk.SetValue(Application.ProductName, $"\"{Application.ExecutablePath}\"");
             else
                 rk.DeleteValue(Application.ProductName, false);
-            C.WriteLine("`i set startup registry key");
+           // C.WriteLine("`i set startup registry key");
         }
 
         public static void BeginExit()
@@ -105,13 +105,13 @@ namespace Seppuku.Client.Windows.CLI
         {
             if (data == null)
             {
-                C.WriteLine("`i error while communicating with seppuku server");
+              //  C.WriteLine("`i error while communicating with seppuku server");
                 NotificationIcon.ShowBalloonTip(5000, "Seppuku Connection Failure", "Could not connect to remote Seppuku server!", ToolTipIcon.Error);
             }
             else
             {
-                C.WriteLine("`i response received from seppuku server");
-                C.WriteLine("{0}", data.ToString());
+              //  C.WriteLine("`i response received from seppuku server");
+               // C.WriteLine("{0}", data.ToString());
                 switch ((int)data["status"])
                 {
                     case 0:
@@ -153,7 +153,7 @@ namespace Seppuku.Client.Windows.CLI
 
             public void Execute(IJobExecutionContext context)
             {
-                C.WriteLine("`i deadman's switch reset trigger activated");
+               // C.WriteLine("`i deadman's switch reset trigger activated");
                 try
                 {
                     string token = SeppukuAuth.GetCurrentToken(Config.Get("Secret", ""));
@@ -208,13 +208,13 @@ namespace Seppuku.Client.Windows.CLI
                 .Build();
 
             Scheduler.ScheduleJob(TriggerJob, trigger);
-            C.WriteLine("`i scheduled reset trigger");
+            //C.WriteLine("`i scheduled reset trigger");
         }
 
         public static void UnscheduleTrigger()
         {
             Scheduler.UnscheduleJob(new TriggerKey(TriggerKey, GroupKey));
-            C.WriteLine("`i unscheduled reset trigger");
+           // C.WriteLine("`i unscheduled reset trigger");
         }
     }
 }
