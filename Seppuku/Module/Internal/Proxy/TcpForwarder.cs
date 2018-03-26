@@ -8,10 +8,10 @@ namespace Seppuku.Module.Internal.Proxy
     public class TcpForwarderSlim
     {
         private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
-        
+
         private readonly Socket _mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public IPEndPoint Remote { get; set; }
-        
+
         public void Start(IPEndPoint local)
         {
             _mainSocket.Bind(local);
@@ -21,6 +21,7 @@ namespace Seppuku.Module.Internal.Proxy
             {
                 while (true)
                 {
+
                     var source = _mainSocket.Accept();
                     var destination = new TcpForwarderSlim();
                     var state = new State(source, destination._mainSocket);
@@ -30,8 +31,9 @@ namespace Seppuku.Module.Internal.Proxy
             }
             catch (SocketException ex)
             {
-                Console.WriteLine(ex.ToString());
+                L.Error(ex, "TCP forwarder exception");
             }
+
         }
 
         public void Stop()

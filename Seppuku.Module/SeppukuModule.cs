@@ -40,7 +40,6 @@ namespace Seppuku.Module
             ModuleConfig.Initialize(defaultConf);
         }
 
-
         public virtual void OnStart() { }
         public virtual void OnTrigger() { }
         public virtual void OnReset() { }

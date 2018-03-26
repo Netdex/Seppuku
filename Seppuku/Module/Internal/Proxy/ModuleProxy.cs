@@ -33,7 +33,7 @@ namespace Seppuku.Module.Internal.Proxy
 
         public override void OnStart()
         {
-            L.Trace("Listener configured to {0}:{1}", 
+            L.Trace("Listening at {0}:{1}", 
                 ModuleConfig.Get<string>("ListenAddress"), ModuleConfig.Get<long>("ListenPort"));
             if (SwitchControl.IsTriggered)
             {
@@ -48,7 +48,7 @@ namespace Seppuku.Module.Internal.Proxy
 
         private void ProxyEndpoint(string laddr, int lport, string eaddr, int eport)
         {
-            if (_tcp == null)
+            if (_listenThread == null)
             {
                 _tcp = new TcpForwarderSlim();
                 _listenThread = new Thread(() =>
@@ -63,6 +63,7 @@ namespace Seppuku.Module.Internal.Proxy
                     }
 
                     L.Trace("Forwarder terminated from thread");
+                    _listenThread = null;
                 });
                 _listenThread.Start();
             }

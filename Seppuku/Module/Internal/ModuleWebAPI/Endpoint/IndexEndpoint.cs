@@ -70,32 +70,32 @@ namespace Seppuku.Module.Internal.ModuleWebAPI.Endpoint
                 return Response.AsText(jo.ToString(Formatting.None));
             };
 
-            Get["/trigger/{token}"] = param =>
-            {
-                var jo = new JObject();
-                if (SwitchControl.IsAuthorized(param.token))
-                {
-                    if (SwitchControl.IsExpired)
-                    {
-                        jo["verbose"] = "cannot trigger expired timer";
-                        jo["status"] = -1;
-                    }
-                    else
-                    {
-                        SwitchControl.Trigger();
-                        jo["verbose"] = "trigger successful";
-                        jo["status"] = 0;
-                    }
-                }
-                else
-                {
-                    jo["verbose"] = "unauthorized";
-                    jo["status"] = -999;
-                }
-                return Response.AsText(jo.ToString(Formatting.None));
-            };
+            //Get["/trigger/{token}"] = param =>
+            //{
+            //    var jo = new JObject();
+            //    if (SwitchControl.IsAuthorized(param.token))
+            //    {
+            //        if (SwitchControl.IsExpired)
+            //        {
+            //            jo["verbose"] = "cannot trigger expired timer";
+            //            jo["status"] = -1;
+            //        }
+            //        else
+            //        {
+            //            SwitchControl.Trigger();
+            //            jo["verbose"] = "trigger successful";
+            //            jo["status"] = 0;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        jo["verbose"] = "unauthorized";
+            //        jo["status"] = -999;
+            //    }
+            //    return Response.AsText(jo.ToString(Formatting.None));
+            //};
 
-#if DEBUG
+//#if DEBUG
             Get["/debug/reset"] = _ =>
             {
                 var jo = new JObject();
@@ -114,7 +114,7 @@ namespace Seppuku.Module.Internal.ModuleWebAPI.Endpoint
                 jo["status"] = 0;
                 return Response.AsText(jo.ToString(Formatting.None));
             };
-#endif
+//#endif
         }
     }
 }

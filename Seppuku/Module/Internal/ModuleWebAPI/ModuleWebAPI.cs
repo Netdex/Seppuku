@@ -27,7 +27,7 @@ namespace Seppuku.Module.Internal.ModuleWebAPI
             // run the web api
             _host = new NancyHost(new HostConfiguration
             {
-                RewriteLocalhost = false,
+                RewriteLocalhost = true,
             }, new Uri($"http://localhost:{port}"));
             _host.Start();
             L.Info($"Running on http://localhost:{port}/");
