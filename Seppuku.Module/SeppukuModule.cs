@@ -48,12 +48,11 @@ namespace Seppuku.Module
 
         public static string GetCurrentToken(string secret)
         {
-            var sha1 = new SHA1CryptoServiceProvider();
-            return Convert.ToBase64String(
-                    sha1.ComputeHash(
-                        Encoding.ASCII.GetBytes(
-                            secret + DateTime.UtcNow.Date)))
-                .Replace('+', '-').Replace('/', '_').Replace('=', '.');
+            byte[] byteArray = Encoding.ASCII.GetBytes(DateTime.UtcNow.Date.ToLongDateString());
+            using (HMACSHA1 myhmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(secret)))
+            {
+                return myhmacsha1.ComputeHash(byteArray).Aggregate("", (s, e) => s + $"{e:x2}", s => s);
+            }
         }
     }
 }

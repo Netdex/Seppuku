@@ -33,7 +33,7 @@ namespace Seppuku
             {
                 L.Info("Loaded modules: ");
                 foreach (var mod in ModuleManager.Modules)
-                    L.Info("{0,20} - {1}", $"[{mod.Value.Name}]", mod.Value.Description);
+                    L.Info("{0} {1}", $"[{mod.Value.Name}]", mod.Value.Description);
             }
             else
             {
