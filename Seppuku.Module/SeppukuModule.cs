@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Seppuku.Module.Config;
-using Seppuku.Module.Utility;
 
 namespace Seppuku.Module
 {
 
     public abstract class SeppukuModule
     {
-        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
 
         public const string ModuleConfigDirectory = "Configuration";
 
@@ -46,19 +46,14 @@ namespace Seppuku.Module
         public virtual void OnReset() { }
         public virtual void OnStop() { }
 
-
-        [StringFormatMethod("format")]
-        public void Log(string format, params object[] param)
+        public static string GetCurrentToken(string secret)
         {
-            format = string.Format(format, param);
-            try
-            {
-                L.Info("{0} {1}", $"[{Name}]", format);
-            }
-            catch
-            {
-                L.Error("`e Invalid formatting in message from {0}", Name);
-            }
+            var sha1 = new SHA1CryptoServiceProvider();
+            return Convert.ToBase64String(
+                    sha1.ComputeHash(
+                        Encoding.ASCII.GetBytes(
+                            secret + DateTime.UtcNow.Date)))
+                .Replace('+', '-').Replace('/', '_').Replace('=', '.');
         }
     }
 }

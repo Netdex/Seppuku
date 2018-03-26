@@ -8,8 +8,8 @@ using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using Quartz;
 using Quartz.Impl;
+using Seppuku.Module;
 using Seppuku.Module.Config;
-using Seppuku.Module.Utility;
 
 namespace Seppuku.Client.Windows.CLI
 {
@@ -156,7 +156,7 @@ namespace Seppuku.Client.Windows.CLI
                // C.WriteLine("`i deadman's switch reset trigger activated");
                 try
                 {
-                    string token = SeppukuAuth.GetCurrentToken(Config.Get("Secret", ""));
+                    string token = SeppukuModule.GetCurrentToken(Config.Get("Secret", ""));
                     string addr = $"{Config.Get("RemoteAddress", "")}:" +
                                   $"{Config.Get("Port", 0L)}/reset/{token}";
                     string data = RemoteWebClient.DownloadString(addr);

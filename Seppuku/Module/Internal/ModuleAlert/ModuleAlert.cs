@@ -11,28 +11,30 @@ namespace Seppuku.Module.Internal.ModuleAlert
     [Export(typeof(SeppukuModule))]
     public class ModuleAlert : SeppukuModule
     {
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         public ModuleAlert() : base("ModuleAlert", "Default test module", new Dictionary<string, object>())
         {
         }
 
         public override void OnStart()
         {
-            Log("Modules loaded");
+            L.Warn("Modules loaded");
         }
 
         public override void OnTrigger()
         {
-            Log("Deadman's switch triggered");
+            L.Warn("Deadman's switch triggered");
         }
 
         public override void OnReset()
         {
-            Log("Reset, new trigger date is {0}", Configuration.Get<DateTime>("FailureDate"));
+            L.Warn("Reset, new trigger date is {0}", Configuration.Get<DateTime>("FailureDate"));
         }
 
         public override void OnStop()
         {
-            Log("Modules stopped");
+            L.Warn("Modules stopped");
         }
     }
 }

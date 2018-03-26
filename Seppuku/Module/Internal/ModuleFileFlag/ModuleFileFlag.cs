@@ -22,13 +22,13 @@ namespace Seppuku.Module.Internal.ModuleFileFlag
         public override void OnStart()
         {
             string cd = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            File.Create(Path.Combine(cd, ModuleConfig.Get<string>("RunningFlagFileName")));
+            File.Create(Path.Combine(cd, ModuleConfig.Get<string>("RunningFlagFileName"))).Close();
         }
 
         public override void OnTrigger()
         {
             string cd = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            File.Create(Path.Combine(cd, ModuleConfig.Get<string>("TriggerFlagFileName")));
+            File.Create(Path.Combine(cd, ModuleConfig.Get<string>("TriggerFlagFileName"))).Close();
         }
 
         public override void OnReset()

@@ -10,23 +10,27 @@ namespace Seppuku.Module.Internal.ModuleWebAPI
     [Export(typeof(SeppukuModule))]
     internal class ModuleWebAPI : SeppukuModule
     {
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
         private NancyHost _host;
 
-        public ModuleWebAPI() : base("ModuleWebAPI", "Enables the web api", new Dictionary<string, object>())
+        public ModuleWebAPI() : base("ModuleWebAPI", "Enables the web api", new Dictionary<string, object>()
         {
-            
+            ["Port"] = 19007L
+        })
+        {
+           
         }
 
         public override void OnStart()
         {
-            var port = (int) Seppuku.Config.Configuration.Get<long>("Port", 19007);
+            var port = (int) ModuleConfig.Get<long>("Port");
             // run the web api
             _host = new NancyHost(new HostConfiguration
             {
                 RewriteLocalhost = false,
             }, new Uri($"http://localhost:{port}"));
             _host.Start();
-            Log($"Running on http://localhost:{port}/");
+            L.Info($"Running on http://localhost:{port}/");
         }
 
         public override void OnTrigger()

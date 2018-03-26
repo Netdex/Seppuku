@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Reflection;
-using Seppuku.Module.Utility;
 
 namespace Seppuku.Module
 {
@@ -98,6 +97,7 @@ namespace Seppuku.Module
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.ToString());
                     L.Error(e, "[{0}] {1} is misbehaving!", type, tm.Value.Name);
                 }
         }

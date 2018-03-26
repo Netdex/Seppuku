@@ -13,6 +13,8 @@ namespace Seppuku.Module.Internal.ModuleWebAPI.Endpoint
     /// </summary>
     public class IndexEndpoint : NancyModule
     {
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
         public IndexEndpoint()
         {
             Get["/"] = _ =>

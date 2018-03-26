@@ -1,0 +1,85 @@
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Net;
+using System.Threading;
+using Seppuku.Switch;
+
+namespace Seppuku.Module.Internal.Proxy
+{
+    [Export(typeof(SeppukuModule))]
+    public class ModuleProxy : SeppukuModule
+    {
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+
+        private TcpForwarderSlim _tcp;
+        private Thread _listenThread;
+
+        public ModuleProxy() : base(
+            "ModuleProxy",
+            "Proxies all requests, changing endpoint when triggered",
+            new Dictionary<string, object>
+            {
+                ["ListenAddress"] = "0.0.0.0",
+                ["ListenPort"] = 19080L,
+                ["EndpointAddressNormal"] = "151.80.40.155",
+                ["EndpointPortNormal"] = 80L,
+                ["EndpointAddressTriggered"] = "151.80.40.155",
+                ["EndpointPortTriggered"] = 81L
+            })
+        {
+            
+        }
+
+        public override void OnStart()
+        {
+            if (SwitchControl.IsTriggered)
+            {
+                OnTrigger();
+            }
+            else
+            {
+                OnReset();
+            }
+
+        }
+
+        private void ProxyEndpoint(string laddr, int lport, string eaddr, int eport)
+        {
+            if (_tcp == null)
+            {
+                _tcp = new TcpForwarderSlim();
+                _listenThread = new Thread(() =>
+                {
+                    _tcp.Start(new IPEndPoint(IPAddress.Parse(laddr), lport));
+                    L.Trace("Forwarder terminated from thread");
+                });
+                _listenThread.Start();
+            }
+            L.Trace("Setting TCP forwarder endpoint to {0}:{1}", eaddr, eport);
+            _tcp.Remote = new IPEndPoint(IPAddress.Parse(eaddr), eport);
+            
+        }
+        public override void OnTrigger()
+        {
+            ProxyEndpoint(
+                ModuleConfig.Get<string>("ListenAddress"), (int)ModuleConfig.Get<long>("ListenPort"), 
+                ModuleConfig.Get<string>("EndpointAddressTriggered"), (int)ModuleConfig.Get<long>("EndpointPortTriggered"));
+        }
+
+        public override void OnReset()
+        {
+            ProxyEndpoint(
+                ModuleConfig.Get<string>("ListenAddress"), (int)ModuleConfig.Get<long>("ListenPort"),
+                ModuleConfig.Get<string>("EndpointAddressNormal"), (int)ModuleConfig.Get<long>("EndpointPortNormal"));
+        }
+
+        public override void OnStop()
+        {
+            if (_tcp != null)
+            {
+                L.Trace("Terminating forwarder from module stop");
+                _tcp.Stop();
+            }
+        }
+    }
+}

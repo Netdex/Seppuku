@@ -1,7 +1,6 @@
 ﻿using System;
 using Seppuku.Config;
 using Seppuku.Module;
-using Seppuku.Module.Utility;
 using Seppuku.Properties;
 using Seppuku.Switch;
 
@@ -21,7 +20,7 @@ namespace Seppuku
                     Configuration.ConfigurationFileName);
             L.Info("Secret key is {0}",
                 Configuration.Get<string>("Secret"));
-            L.Info("Today's auth token is {0}", SeppukuAuth.GetCurrentToken(Configuration.Get<string>("Secret")));
+            L.Info("Today's auth token is {0}", SeppukuModule.GetCurrentToken(Configuration.Get<string>("Secret")));
 
             // load scheduling information from global configuration
             Sched.Initialize();

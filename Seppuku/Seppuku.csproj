@@ -78,6 +78,8 @@
     <Compile Include="Module\Internal\ModuleAlert\ModuleAlert.cs" />
     <Compile Include="Module\Internal\ModuleFileFlag\ModuleFileFlag.cs" />
     <Compile Include="Module\Internal\ModuleWebAPI\ModuleWebAPI.cs" />
+    <Compile Include="Module\Internal\Proxy\ModuleProxy.cs" />
+    <Compile Include="Module\Internal\Proxy\TcpForwarder.cs" />
     <Compile Include="Module\ModuleManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

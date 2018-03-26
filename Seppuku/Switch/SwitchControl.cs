@@ -1,7 +1,6 @@
 ﻿using System;
 using Seppuku.Config;
 using Seppuku.Module;
-using Seppuku.Module.Utility;
 
 namespace Seppuku.Switch
 {
@@ -40,7 +39,7 @@ namespace Seppuku.Switch
         public static bool IsExpired => TimeLeft() < TimeSpan.Zero;
         public static bool IsTriggered => Configuration.Get("Triggered", false);
         public static bool IsAuthorized(string secret) =>
-            secret == SeppukuAuth.GetCurrentToken(Configuration.Get<string>("Secret"));
+            secret == SeppukuModule.GetCurrentToken(Configuration.Get<string>("Secret"));
 
     }
 }

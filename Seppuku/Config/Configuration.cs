@@ -35,7 +35,6 @@ namespace Seppuku.Config
             DefaultConf = new Dictionary<string, object>
             {
                 ["GraceTime"] = TimeSpan.FromDays(30).TotalSeconds,
-                ["Port"] = 19007L,
                 ["Secret"] = Guid.NewGuid().ToString()
             };
             DefaultConf["FailureDate"] = DateTime.Now.AddSeconds((double)DefaultConf["GraceTime"]);
