@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using Seppuku.Switch;
 
@@ -32,6 +33,8 @@ namespace Seppuku.Module.Internal.Proxy
 
         public override void OnStart()
         {
+            L.Trace("Listener configured to {0}:{1}", 
+                ModuleConfig.Get<string>("ListenAddress"), ModuleConfig.Get<long>("ListenPort"));
             if (SwitchControl.IsTriggered)
             {
                 OnTrigger();
@@ -50,7 +53,15 @@ namespace Seppuku.Module.Internal.Proxy
                 _tcp = new TcpForwarderSlim();
                 _listenThread = new Thread(() =>
                 {
-                    _tcp.Start(new IPEndPoint(IPAddress.Parse(laddr), lport));
+                    try
+                    {
+                        _tcp.Start(new IPEndPoint(IPAddress.Parse(laddr), lport));
+                    }
+                    catch (SocketException ex)
+                    {
+                        L.Error(ex, "TCP Forwarder encountered exception");
+                    }
+
                     L.Trace("Forwarder terminated from thread");
                 });
                 _listenThread.Start();

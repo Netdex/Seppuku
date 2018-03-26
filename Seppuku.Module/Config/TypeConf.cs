@@ -9,8 +9,8 @@ namespace Seppuku.Module.Config
     /// </summary>
     public class TypeConf
     {
-        public Dictionary<string, object> Conf;
-        public Dictionary<string, object> Defaults;
+        private Dictionary<string, object> Conf { get; set; }
+        public Dictionary<string, object> Defaults { get; private set; }
 
         public TypeConf(string file)
         {

@@ -7,8 +7,11 @@ namespace Seppuku.Module.Internal.Proxy
     // http://blog.brunogarcia.com/2012/10/simple-tcp-forwarder-in-c.html
     public class TcpForwarderSlim
     {
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+        
         private readonly Socket _mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         public IPEndPoint Remote { get; set; }
+        
         public void Start(IPEndPoint local)
         {
             _mainSocket.Bind(local);

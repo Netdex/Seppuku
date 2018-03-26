@@ -58,6 +58,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)\Seppuku\bin\Debug\Modules</PostBuildEvent>
+    <!--<PostBuildEvent>cp $(TargetPath) $(SolutionDir)/Seppuku/bin/Debug/Modules</PostBuildEvent>-->
   </PropertyGroup>
 </Project>

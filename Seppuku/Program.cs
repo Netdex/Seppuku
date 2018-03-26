@@ -12,7 +12,7 @@ namespace Seppuku
         private static void Main(string[] args)
         {
             // show the sick greeting
-            L.Info(Resources.Greeting);
+            //Console.WriteLine(Resources.Greeting);
 
             // load global configuration
             if (Configuration.Init())
