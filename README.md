@@ -9,6 +9,8 @@
 Seppuku is a self-hosted digital [deadman's switch](https://en.wikipedia.org/wiki/Dead_man%27s_switch) 
 installation with an extensible .NET module system.
 
+It intends to follow the principles outlined in [this blog post](https://blog.netdex.cf/2017/creating-a-deadmans-switch/).
+
 Consists of a continous countdown timer, which requires constant resets to avoid triggering, akin to a deadman's switch used 
 in a train. If the timer is allowed to countdown because the owner is not able to reset the timer, then it will trigger a list 
 of actions in the form of "modules", which can be added to Seppuku to extend its functionality.
@@ -19,19 +21,20 @@ in your contacts.
 ## FAQ
 
 **Q**: I'll be dead anyways, why would I care about what happens after I die?<br>
-**A**: I just write software, get your moral dilemmas outta here
+**A**: I just write software, get your philosophy outta here
 
 **Q**: How should I run this?<br>
-**A**: Rent a Linux box and run it with Mono as a daemon or something of that ilk. I haven't actually tested it with Mono so good luck with that.
+**A**: Rent a Linux box and run it with Mono as a daemon or something of that ilk.
 
 ### Build Instructions
 1. Restore NuGet targets in `packages.config`
 2. Use `msbuild` or `xbuild` to build the release target of Seppuku.sln
 
 ### Usage
-1. Run seppuku.exe, it will generate a configuation file on first run.
+1. Run seppuku.exe, it will generate a configuration files on first run.
 2. Modify the configuration file to your heart's content.
-3. Restart seppuku.exe and leave it running.
+3. Modify the module configuration files in Configuration/.
+4. Restart seppuku.exe and leave it running.
 
 ### Web API
 Seppuku also exposes a web API through ModuleWebAPI to query information about the deadman's switch, available at localhost:19007 by default (can be configured). All responses are returned in JSON. Look [here](https://github.com/Netdex/Seppuku/blob/master/Seppuku/Module/Internal/Endpoint/IndexEndpoint.cs) if you're curious about what data is returned. The following commands are available (and probably more since I don't document quickly):
@@ -51,12 +54,6 @@ Resets the deadman's switch, so that it will activate `Configuration.GracePeriod
 GET /remain/
 ```
 Returns how much time is remaining in the counter.
-
-#### Force Trigger
-```
-GET /trigger/{token}
-```
-Forces the deadman's switch to fail.
 
 #### Information
 ```
@@ -95,3 +92,6 @@ Exposes the web API mentioned above.
 
 ##### Seppuku.Module.ModuleGetRequest
 Sends GET requests to multiple configurable endpoints when the switch fails.
+
+##### Seppuku.Module.Proxy
+Proxies requests to a specifed endpoint to one of two configurable endpoints. The endpoint chosen depends on whether the dead man's switch has been triggered or not. Good for sinkholing domains when the dead man's switch expires.
