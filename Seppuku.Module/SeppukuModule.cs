@@ -40,7 +40,7 @@ namespace Seppuku.Module
             ModuleConfig.Initialize(defaultConf);
         }
 
-        public virtual void OnStart() { }
+        public virtual void OnStart(bool triggered) { }
         public virtual void OnTrigger() { }
         public virtual void OnReset() { }
         public virtual void OnStop() { }
@@ -48,9 +48,9 @@ namespace Seppuku.Module
         public static string GetCurrentToken(string secret)
         {
             byte[] byteArray = Encoding.ASCII.GetBytes(DateTime.UtcNow.Date.ToLongDateString());
-            using (HMACSHA1 myhmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(secret)))
+            using (HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(secret)))
             {
-                return myhmacsha1.ComputeHash(byteArray).Aggregate("", (s, e) => s + $"{e:x2}", s => s);
+                return hmacsha1.ComputeHash(byteArray).Aggregate("", (s, e) => s + $"{e:x2}", s => s);
             }
         }
     }

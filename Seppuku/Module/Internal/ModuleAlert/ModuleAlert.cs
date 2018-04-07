@@ -17,9 +17,9 @@ namespace Seppuku.Module.Internal.ModuleAlert
         {
         }
 
-        public override void OnStart()
+        public override void OnStart(bool triggered)
         {
-            L.Warn("Modules loaded");
+            L.Warn("Modules loaded, triggered={0}", triggered);
         }
 
         public override void OnTrigger()

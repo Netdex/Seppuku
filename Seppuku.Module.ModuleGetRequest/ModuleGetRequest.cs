@@ -23,7 +23,7 @@ namespace Seppuku.Module.ModuleGetRequest
         {
         }
 
-        public override void OnStart()
+        public override void OnStart(bool triggered)
         {
 
         }

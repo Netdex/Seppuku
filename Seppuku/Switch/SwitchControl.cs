@@ -24,8 +24,9 @@ namespace Seppuku.Switch
         public static void Trigger()
         {
             L.Trace("Triggering switch");
-            //if (!IsExpired)
-            //    Configuration.Set("FailureDate", DateTime.Now.AddMilliseconds(-1));
+            // force expiry if that hasn't happened yet
+            if (!IsExpired)
+                Configuration.Set("FailureDate", DateTime.Now.AddMilliseconds(-1));
             Configuration.Set("Triggered", true);
             Sched.UnscheduleTrigger();
             ModuleManager.Emit(EmitType.Trigger);

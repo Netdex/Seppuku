@@ -1,38 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using NLog;
 
-namespace Seppuku.Module.Proxy
+namespace Seppuku.Module.Internal.Proxy
 {
     // http://blog.brunogarcia.com/2012/10/simple-tcp-forwarder-in-c.html
     public class TcpForwarderSlim
     {
-        private readonly Socket _mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
 
-        public void Start(IPEndPoint local, IPEndPoint remote)
+        private readonly Socket _mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public IPEndPoint Remote { get; set; }
+
+        public void Start(IPEndPoint local)
         {
             _mainSocket.Bind(local);
             _mainSocket.Listen(10);
 
-            while (true)
+            try
             {
-                var source = _mainSocket.Accept();
-                var destination = new TcpForwarderSlim();
-                var state = new State(source, destination._mainSocket);
-                destination.Connect(remote, source);
-                source.BeginReceive(state.Buffer, 0, state.Buffer.Length, 0, OnDataReceive, state);
+                while (true)
+                {
+                    var source = _mainSocket.Accept();
+                    var destination = new TcpForwarderSlim();
+                    var state = new State(source, destination._mainSocket);
+                    destination.Connect(Remote, source);
+                    source.BeginReceive(state.Buffer, 0, state.Buffer.Length, 0, OnDataReceive, state);
+                }
             }
+            catch (SocketException ex)
+            {
+                L.Error(ex, "TCP forwarder exception");
+            }
+
         }
 
         public void Stop()
         {
             if (_mainSocket != null)
             {
-                _mainSocket.Shutdown(SocketShutdown.Both);
                 _mainSocket.Close();
             }
         }
@@ -55,11 +62,12 @@ namespace Seppuku.Module.Proxy
                     state.SourceSocket.BeginReceive(state.Buffer, 0, state.Buffer.Length, 0, OnDataReceive, state);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                state.DestinationSocket.Close();
-                state.SourceSocket.Close();
+                L.Error(ex, "data receive error");
             }
+            state.DestinationSocket.Close();
+            state.SourceSocket.Close();
         }
 
         private class State

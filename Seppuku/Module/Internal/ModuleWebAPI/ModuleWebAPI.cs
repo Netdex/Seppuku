@@ -21,7 +21,7 @@ namespace Seppuku.Module.Internal.ModuleWebAPI
            
         }
 
-        public override void OnStart()
+        public override void OnStart(bool triggered)
         {
             var port = (int) ModuleConfig.Get<long>("Port");
             // run the web api

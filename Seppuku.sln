@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Client.Windows.CLI"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Module.Proxy", "Seppuku.Module.Proxy\Seppuku.Module.Proxy.csproj", "{07523B75-9DB9-4DE5-A730-9C2DDA462203}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seppuku.Module.FileFlag", "Seppuku.Module.FileFlag\Seppuku.Module.FileFlag.csproj", "{22F0DC0D-BAA9-4A32-81EF-FD507724B314}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{07523B75-9DB9-4DE5-A730-9C2DDA462203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07523B75-9DB9-4DE5-A730-9C2DDA462203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07523B75-9DB9-4DE5-A730-9C2DDA462203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F0DC0D-BAA9-4A32-81EF-FD507724B314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F0DC0D-BAA9-4A32-81EF-FD507724B314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F0DC0D-BAA9-4A32-81EF-FD507724B314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F0DC0D-BAA9-4A32-81EF-FD507724B314}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

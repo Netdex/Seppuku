@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Reflection;
+using Seppuku.Switch;
 
 namespace Seppuku.Module
 {
@@ -82,7 +83,7 @@ namespace Seppuku.Module
                     switch (type)
                     {
                         case EmitType.Start:
-                            tm.Value.OnStart();
+                            tm.Value.OnStart(SwitchControl.IsTriggered);
                             break;
                         case EmitType.Stop:
                             tm.Value.OnStop();
