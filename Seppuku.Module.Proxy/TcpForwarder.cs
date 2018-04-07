@@ -61,13 +61,16 @@ namespace Seppuku.Module.Internal.Proxy
                     state.DestinationSocket.Send(state.Buffer, bytesRead, SocketFlags.None);
                     state.SourceSocket.BeginReceive(state.Buffer, 0, state.Buffer.Length, 0, OnDataReceive, state);
                 }
+                else
+                {
+                    state.DestinationSocket.Close();
+                    state.SourceSocket.Close();
+                }
             }
             catch(Exception ex)
             {
                 L.Error(ex, "data receive error");
             }
-            state.DestinationSocket.Close();
-            state.SourceSocket.Close();
         }
 
         private class State
