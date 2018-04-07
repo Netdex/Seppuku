@@ -71,7 +71,7 @@ namespace Seppuku.Module.Internal.Proxy
             }
             catch(Exception ex)
             {
-                L.Error(ex, "data receive error");
+                //L.Error(ex, "data receive error");
                 state.DestinationSocket.Close();
                 state.SourceSocket.Close();
             }
