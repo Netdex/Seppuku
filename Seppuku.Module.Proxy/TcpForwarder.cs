@@ -63,13 +63,17 @@ namespace Seppuku.Module.Internal.Proxy
                 }
                 else
                 {
+                    state.DestinationSocket.Shutdown(SocketShutdown.Both);
                     state.DestinationSocket.Close();
+                    state.SourceSocket.Shutdown(SocketShutdown.Both);
                     state.SourceSocket.Close();
                 }
             }
             catch(Exception ex)
             {
                 L.Error(ex, "data receive error");
+                state.DestinationSocket.Close();
+                state.SourceSocket.Close();
             }
         }
 
