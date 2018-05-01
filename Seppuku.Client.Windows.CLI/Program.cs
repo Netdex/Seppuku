@@ -10,6 +10,7 @@ using Quartz;
 using Quartz.Impl;
 using Seppuku.Module;
 using Seppuku.Module.Config;
+using Seppuku.Module.Standard;
 
 namespace Seppuku.Client.Windows.CLI
 {
@@ -113,15 +114,15 @@ namespace Seppuku.Client.Windows.CLI
             {
                 L.Info("response received from seppuku server");
                 L.Info("{0}", data.ToString());
-                switch ((int)data["status"])
+                switch ((StatusCode)(int)data["status"])
                 {
-                    case 0:
+                    case StatusCode.Success:
                         NotificationIcon.ShowBalloonTip(5000, "Seppuku Reset", "Deadman's switch has been reset!", ToolTipIcon.Info);
                         break;
-                    case -1:
-                        NotificationIcon.ShowBalloonTip(5000, "Seppuku Failure", "Deadman's switch has activated!", ToolTipIcon.Error);
+                    case StatusCode.Expired:
+                        NotificationIcon.ShowBalloonTip(5000, "Seppuku Failure", "Deadman's switch is already expired!", ToolTipIcon.Error);
                         break;
-                    case -999:
+                    case StatusCode.Unauthorized:
                         NotificationIcon.ShowBalloonTip(5000, "Seppuku Failure", "The authorization token is invalid!", ToolTipIcon.Error);
                         break;
                 }

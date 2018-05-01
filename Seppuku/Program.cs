@@ -20,7 +20,7 @@ namespace Seppuku
                     Configuration.ConfigurationFileName);
             L.Info("Secret key is {0}",
                 Configuration.Get<string>("Secret"));
-            L.Info("Today's auth token is {0}", SeppukuModule.GetCurrentToken(Configuration.Get<string>("Secret")));
+            L.Info("Auth token is {0} for the next {1} second(s)", SeppukuModule.GetCurrentToken(Configuration.Get<string>("Secret")), SeppukuModule.TokenDivision);
 
             // load scheduling information from global configuration
             Sched.Initialize();

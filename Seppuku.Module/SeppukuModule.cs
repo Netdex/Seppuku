@@ -17,6 +17,7 @@ namespace Seppuku.Module
         private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
 
         public const string ModuleConfigDirectory = "Configuration";
+        public const int TokenDivision = 60 * 60;
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -47,7 +48,7 @@ namespace Seppuku.Module
 
         public static string GetCurrentToken(string secret)
         {
-            byte[] byteArray = Encoding.ASCII.GetBytes(DateTime.UtcNow.Date.ToLongDateString());
+            byte[] byteArray = BitConverter.GetBytes((long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds / TokenDivision));
             using (HMACSHA1 hmacsha1 = new HMACSHA1(Encoding.ASCII.GetBytes(secret)))
             {
                 return hmacsha1.ComputeHash(byteArray).Aggregate("", (s, e) => s + $"{e:x2}", s => s);
