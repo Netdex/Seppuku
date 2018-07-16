@@ -36,42 +36,6 @@ in your contacts.
 3. Modify the module configuration files in Configuration/.
 4. Restart seppuku.exe and leave it running.
 
-### Web API
-Seppuku also exposes a web API through ModuleWebAPI to query information about the deadman's switch, available at localhost:19007 by default (can be configured). All responses are returned in JSON. Look [here](https://github.com/Netdex/Seppuku/blob/master/Seppuku/Module/Internal/Endpoint/IndexEndpoint.cs) if you're curious about what data is returned. The following commands are available (and probably more since I don't document quickly):
-
-#### Reset
-```
-GET /reset/{token}
-```
-Resets the deadman's switch, so that it will activate `Configuration.GracePeriod` in the future. A token is required, which is derived with the following algorithm:
-
-`sha1(Configuration.Secret + DateTime.UtcNow.Date)`
-
-`Configuration.Secret` is generated on first launch and is in the configuration file, and also printed when the program is run. This is appended to today's date so that the token changes everyday. It is then hashed with sha1 so that the secret is more difficult to derive. This is not the most secure implementation possible, and may possibly be changed in the future.
-
-#### Remaining Time
-```
-GET /remain/
-```
-Returns how much time is remaining in the counter.
-
-#### Information
-```
-GET /
-```
-Some general information about the running Seppuku instance.
-
-#### Debug
-```
-GET /debug/trigger
-```
-Forces the deadman's switch to fail without requiring a token. Only available in the Debug target.
-
-```
-GET /debug/reset
-```
-Resets the deadman's switch without requiring a token. Only available in the Debug target.
-
 ### Configuration
 On first execution, `seppuku.xml` will be generated. Look through it to see what you can modify. The default configuration properties are available at https://github.com/Netdex/Seppuku/blob/master/Seppuku/Config/Conf.cs#L30 (this link might not lead to the right code).
 
@@ -88,7 +52,7 @@ directory as seppuku.exe.
 Prints out a message to the console whenever an event occurs.
 
 ##### Seppuku.Module.Internal.ModuleWebAPI
-Exposes the web API mentioned above.
+Seppuku also exposes a web API through ModuleWebAPI to query information about the deadman's switch, available at localhost:19007 by default (can be configured). All responses are returned in JSON. Look in the code for more details. 
 
 ##### Seppuku.Module.ModuleGetRequest
 Sends GET requests to multiple configurable endpoints when the switch fails.
