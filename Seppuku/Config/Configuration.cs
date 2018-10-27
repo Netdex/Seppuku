@@ -15,19 +15,18 @@ namespace Seppuku.Config
         private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
 
         public const string ConfigurationFileName = "seppuku.json";
-        private static TypeConf _instance;
+
+        private static readonly TypeConf Instance =
+            new TypeConf(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                ConfigurationFileName));
         public static Dictionary<string, object> DefaultConf;
 
-        /// <summary>
-        ///     Singleton instance
-        /// </summary>
-        private static TypeConf I => _instance ?? (_instance = new TypeConf(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ConfigurationFileName)));
 
-        public static T Get<T>(string key, T def)=> I.Get(key, def);
-        public static T Get<T>(string key) => I.Get<T>(key);
+        public static T Get<T>(string key, T def)=> Instance.Get(key, def);
+        public static T Get<T>(string key) => Instance.Get<T>(key);
         public static void Set<T>(string key, T val){
             L.Trace("Setting configuration option {0}: {1}", key, val.ToString());
-            I.Set(key, val);
+            Instance.Set(key, val);
         }
 
         public static bool Init()
@@ -39,7 +38,7 @@ namespace Seppuku.Config
             };
             DefaultConf["FailureDate"] = DateTime.Now.AddSeconds((double)DefaultConf["GraceTime"]);
 
-            return I.Initialize(DefaultConf);
+            return Instance.Initialize(DefaultConf);
         }
     }
 }

@@ -15,15 +15,9 @@ namespace Seppuku.Module
         Reset
     }
 
-    /// <summary>
-    ///     Manages all MEF extensions
-    ///     Q: Why are you wrapping a singleton instance with static methods that just call the object methods?
-    ///     A: MEF requires the array of contracts be inside an object, but I want the module manager to be
-    ///     static in nature, so naturally this disaster of a design pattern arose.
-    /// </summary>
     public class ModuleManager
     {
-        private static NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger L = NLog.LogManager.GetCurrentClassLogger();
 
         public const string AssemblyDirectory = "Modules";
 
@@ -31,28 +25,13 @@ namespace Seppuku.Module
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             AssemblyDirectory);
 
-        private static ModuleManager _instance;
+        public static ModuleManager Instance = new ModuleManager();
 
-        private CompositionContainer _container;
-
-        /// <summary>
-        ///     Singleton instance
-        /// </summary>
-        private static ModuleManager I => _instance ?? (_instance = new ModuleManager());
 
         [ImportMany]
         public Lazy<SeppukuModule>[] SeppukuModules { get; set; }
-
-        public static Lazy<SeppukuModule>[] Modules => I.SeppukuModules;
-
-        #region Static Singleton Wrappers
-
-        public static bool Init() => I.Initialize();
-        public static void Emit(EmitType type) => I.EmitMessage(type);
-
-        #endregion
-
-        #region Singleton Instance Methods
+        public static Lazy<SeppukuModule>[] Modules => Instance.SeppukuModules;
+        private CompositionContainer _container;
 
         public bool Initialize()
         {
@@ -75,7 +54,7 @@ namespace Seppuku.Module
         /// <summary>
         ///     Send a message to all modules
         /// </summary>
-        public void EmitMessage(EmitType type)
+        public void Emit(EmitType type)
         {
             foreach (var tm in SeppukuModules)
                 try
@@ -102,6 +81,5 @@ namespace Seppuku.Module
                 }
         }
 
-        #endregion
     }
 }

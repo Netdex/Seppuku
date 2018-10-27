@@ -29,7 +29,7 @@ namespace Seppuku
                 TimeSpan.FromSeconds(Configuration.Get<double>("GraceTime")));
 
             // load modules from internal and directory
-            if (ModuleManager.Init())
+            if (ModuleManager.Instance.Initialize())
             {
                 L.Info("Loaded modules: ");
                 foreach (var mod in ModuleManager.Modules)
@@ -64,8 +64,8 @@ namespace Seppuku
             }
 
             // run and bind all the handlers for the modules
-            ModuleManager.Emit(EmitType.Start);
-            Console.CancelKeyPress += (sender, eventArgs) => { ModuleManager.Emit(EmitType.Stop); };
+            ModuleManager.Instance.Emit(EmitType.Start);
+            Console.CancelKeyPress += (sender, eventArgs) => { ModuleManager.Instance.Emit(EmitType.Stop); };
         }
     }
 }
