@@ -14,6 +14,10 @@ namespace Seppuku
             // show the sick greeting
             Console.WriteLine(Resources.Greeting);
 
+#if DEBUG
+            L.Warn("THIS IS AN INSECURE DEBUG BUILD! DO NOT USE IN PRODUCTION!");
+#endif
+
             // load global configuration
             if (Configuration.Init())
                 L.Warn("Configuration file did not exist or was corrupted, created {0}",
